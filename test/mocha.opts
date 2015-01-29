@@ -1,0 +1,4 @@
+--require ./test/globals.js
+--compilers coffee:coffee-script/register
+--recursive
+--timeout 10000
