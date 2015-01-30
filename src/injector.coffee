@@ -18,7 +18,7 @@ module.exports = ()->
 
 
   ioc.registerFolders __dirname, [
-    "middleware"
+    "middleware",
     "webserver"
   ]
   ioc.merge(spurCommon())

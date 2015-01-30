@@ -23,6 +23,5 @@ module.exports = (SpurErrors, Logger, BaseMiddleware)->
         json:()->
           res.json({error:err.message, data:err.data})
 
-
     htmlErrorRender:(res, error)=>
       res.send(error.stack)
