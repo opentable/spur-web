@@ -4,8 +4,8 @@ module.exports = (Logger, expressWinston)->
 
     configure:(@app)->
       @app.use expressWinston.logger {
-        winstonInstance:Logger
-        meta: true
-        expressFormat: false
-        colorStatus: true
+        winstonInstance : Logger
+        meta            : true
+        expressFormat   : false
+        colorStatus     : true
       }
