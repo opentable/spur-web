@@ -1,9 +1,9 @@
-module.exports = (Promise, _)->
+module.exports = (Promise, _, BaseMiddleware)->
 
-  new class PromiseMiddleware
+  new class PromiseMiddleware extends BaseMiddleware
 
     configure:(app)->
-
+      super
       app.response.jsonAsync = (args...)->
         Promise.all(args)
           .then (results)=>

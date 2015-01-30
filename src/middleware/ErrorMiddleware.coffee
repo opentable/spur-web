@@ -1,7 +1,9 @@
-module.exports = (SpurErrors, Logger)->
-  new class ErrorMiddleware
+module.exports = (SpurErrors, Logger, BaseMiddleware)->
+
+  new class ErrorMiddleware extends BaseMiddleware
 
     configure:(@app)->
+      super
       @app.use @middleware(@)
 
     middleware:(self)-> (err, req, res, next)->

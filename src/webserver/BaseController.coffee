@@ -1,4 +1,4 @@
-module.exports = (config)->
+module.exports = (config, Logger)->
 
   class BaseController
 
@@ -6,3 +6,5 @@ module.exports = (config)->
       @rootWebPath = config.RootWebPath or ""
 
     configure:()->
+      Logger.info "Registering controller: #{@constructor.name}"
+

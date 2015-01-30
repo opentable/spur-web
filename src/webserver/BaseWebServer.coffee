@@ -45,7 +45,10 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
 
 
     stop:()->
-      @server?.closeAsync?() or Promise.resolve()
+      (@server?.closeAsync?() or Promise.resolve())
+        .finally =>
+          Logger.info "Express server stopped"
+
 
 
     startedMessage:()->

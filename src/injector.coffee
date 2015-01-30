@@ -16,11 +16,12 @@ module.exports = ()->
     "ejs"             : require "ejs"
   }
 
+
   ioc.registerFolders __dirname, [
     "middleware"
     "webserver"
   ]
-
   ioc.merge(spurCommon())
+
 
   ioc
