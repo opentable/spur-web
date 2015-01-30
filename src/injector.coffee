@@ -10,6 +10,7 @@ module.exports = ()->
   }
 
   ioc.registerFolders __dirname, [
+    "webserver"
   ]
 
   ioc.merge(spurCommon())
