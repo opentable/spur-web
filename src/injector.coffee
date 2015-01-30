@@ -21,7 +21,5 @@ module.exports = ()->
     "middleware",
     "webserver"
   ]
-  ioc.merge(spurCommon())
-
 
   ioc

@@ -1,5 +1,6 @@
-spur          = require "spur-ioc"
-localInjector = require "../../src/injector"
+spur       = require "spur-ioc"
+spurWeb    = require "../../src/injector"
+spurCommon = require "spur-common"
 
 module.exports = ()->
 
@@ -7,9 +8,9 @@ module.exports = ()->
 
   ioc.addDependency "config", {
     RootWebPath   : "/user/agustin/test/"
-    useMockLogger : true
   }
 
-  ioc.merge(localInjector())
+  ioc.merge(spurCommon())
+  ioc.merge(spurWeb())
 
   ioc
