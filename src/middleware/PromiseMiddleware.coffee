@@ -19,7 +19,7 @@ module.exports = (Promise, _, BaseMiddleware)->
       app.response.sendAsync = (args...)->
         Promise.all(args)
           .then (results)=>
-            @send.apply(res, results)
+            @send.apply(@, results)
           .catch(@req.next)
 
       app.response.sendStatusAsync = (args...)->
