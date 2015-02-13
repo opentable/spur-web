@@ -11,17 +11,22 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
       @server?.address().port or @port
 
     registerDefaultMiddleware:()->
-      DefaultMiddleware.configure(@app, @logger)
+      DefaultMiddleware.configure(@app)
 
     registerLoggingMiddleware:()->
       WinstonRequestLoggingMiddleware.configure(@app)
 
     registerMiddleware:()->
       @registerLoggingMiddleware()
+      @registerStaticMiddleware()
       @registerDefaultMiddleware()
-
+      @registerTemplatingEngine()
       PromiseMiddleware.configure(@app)
       @registerControllers()
+
+    registerStaticMiddleware:()->
+
+    registerTemplatingEngine:()->
 
     registerControllers:()->
       ControllerRegistration.register(@app)
