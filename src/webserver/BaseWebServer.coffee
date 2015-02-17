@@ -3,12 +3,9 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
   class BaseWebServer
     constructor:()->
       @app = express()
-      @port = config.Port
-
-    setPort:(@port)->
 
     getPort:()->
-      @server?.address().port or @port
+      @server?.address().port or config.Port
 
     registerDefaultMiddleware:()->
       DefaultMiddleware.configure(@app)
@@ -42,7 +39,7 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
       @startInternal()
 
     startInternal:()-> new Promise (resolve, reject)=>
-      @server = @app.listen @port, ()=>
+      @server = @app.listen config.Port, ()=>
         Logger.info @startedMessage()
         resolve()
       Promise.promisifyAll(@server)
