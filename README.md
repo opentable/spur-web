@@ -50,15 +50,12 @@ Note: Any injectors in which you merge this library to will get all of these dep
 ```javascript
 var spur = require("spur-ioc");
 var spurWeb = require("spur-web");
+var spurCommon = require("spur-common");
+
 
 module.exports = function(){
   // define a  new injector
   var ioc = spur.create("demo");
-
-  // register node modules to be injected
-  ioc.registerLibraries({
-    ...
-  });
 
   // register already constructed objects such as globals
   ioc.registerDependencies({
@@ -71,6 +68,7 @@ module.exports = function(){
   ]);
 
   // THIS IS THE IMPORTANT PART: Merge the spur-web dependencies to your local container
+  ioc.merge(spurCommon())
   ioc.merge(spurWeb())
 
   return ioc;
