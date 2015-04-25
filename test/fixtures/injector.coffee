@@ -1,16 +1,16 @@
-spur       = require "spur-ioc"
-spurWeb    = require "../../src/injector"
-spurCommon = require "spur-common"
+path           = require "path"
+spur           = require "spur-ioc"
+spurCommon     = require "spur-common"
+localInjector  = require "../../src/injector"
+registerConfig = require "spur-common/registerConfig"
 
-module.exports = ()->
+module.exports = () ->
 
   ioc = spur.create("test-spur-web")
 
-  ioc.addDependency "config", {
-    RootWebPath   : "/user/agustin/test/"
-  }
+  registerConfig(ioc, path.join(__dirname, "config"))
 
   ioc.merge(spurCommon())
-  ioc.merge(spurWeb())
+  ioc.merge(localInjector())
 
   ioc

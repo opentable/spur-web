@@ -16,8 +16,8 @@ module.exports = ()->
     "ejs"             : require "ejs"
   }
 
-
   ioc.registerFolders __dirname, [
+    "core"
     "middleware",
     "webserver"
   ]
