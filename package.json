@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "spur-common": "latest",
-    "sinon-chai": "^2.6.0",
+    "spur-config": "latest",
     "chai": "^1.10.0",
     "sinon": "^1.12.2",
     "mocha": "^2.1.0",
