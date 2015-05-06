@@ -8,9 +8,11 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
       @server?.address().port or config.Port
 
     registerDefaultMiddleware:()->
+      @logSectionHeader("Default Middleware Registration")
       DefaultMiddleware.configure(@app)
 
     registerLoggingMiddleware:()->
+      @logSectionHeader("Logging Middleware Registration")
       WinstonRequestLoggingMiddleware.configure(@app)
 
     registerMiddleware:()->
@@ -26,9 +28,11 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
     registerTemplatingEngine:()->
 
     registerControllers:()->
+      @logSectionHeader("Controller Registration")
       ControllerRegistration.register(@app)
 
     registerErrorMiddleware:()->
+      @logSectionHeader("Error Middleware Registration")
       ErrorMiddleware.configure(@app)
 
     setCluster:(@cluster)->
@@ -55,3 +59,8 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
         "Worker #{@cluster.worker.id} started on port #{@getPort()}"
       else
         "Express app started on port #{@getPort()}"
+
+    logSectionHeader: (message)->
+      Logger.info "========================"
+      Logger.info "= #{message}"
+      Logger.info "========================"
