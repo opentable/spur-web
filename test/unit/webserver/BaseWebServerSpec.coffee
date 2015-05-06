@@ -33,15 +33,6 @@ describe "BaseWebServer", ->
       @HTTPService.get("http://localhost:9080").promise().then (res)=>
         expect(res.text).to.equal "SomeIndex"
 
-        expect(@Logger.recorded.info).to.deep.equal [
-          [ 'Registering Middleware: DefaultMiddleware' ],
-          [ 'Registering Middleware: PromiseMiddleware' ],
-          [ 'Registering controller: IndexController' ],
-          [ 'Registered 1 Controller(s)' ],
-          [ 'Registering Middleware: ErrorMiddleware' ],
-          [ 'Express app started on port 9080' ]
-        ]
-
   it "with port0 ", ->
     @startServerOnPort(0).then =>
       port = @webServer.getPort()
