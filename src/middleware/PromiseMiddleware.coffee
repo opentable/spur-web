@@ -4,6 +4,7 @@ module.exports = (Promise, _, BaseMiddleware)->
 
     configure:(app)->
       super
+
       app.response.jsonAsync = (args...)->
         Promise.all(args)
           .then (results)=>

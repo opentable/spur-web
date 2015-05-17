@@ -15,4 +15,4 @@ module.exports = ($injector, _, Logger, BaseController)->
         .invoke("configure", app)
         .value().length
 
-      Logger.info "Registered #{registeredCount} Controller(s)"
+      Logger.log "Registered #{registeredCount} Controller(s)"
