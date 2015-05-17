@@ -7,6 +7,6 @@ module.exports = (Logger, expressWinston, BaseMiddleware)->
       @app.use expressWinston.logger {
         winstonInstance : Logger
         meta            : true
-        expressFormat   : false
+        expressFormat   : true
         colorStatus     : true
       }

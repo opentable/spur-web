@@ -15,6 +15,7 @@ module.exports = (SpurErrors, Logger, BaseMiddleware)->
         err = SpurErrors.InternalServerError.create(err.message, err)
 
       res.status(err.statusCode)
+
       res.format
         text:()->
           res.send(err.message)

@@ -17,11 +17,11 @@ describe "BaseMiddleware", ->
 
         configure:()->
           super
-          self.Logger.info("Subclass called")
+          self.Logger.log("Subclass called")
 
 
     myMiddleware.configure("app")
-    expect(@Logger.recorded.info).to.deep.equal [
+    expect(@Logger.recorded.log).to.deep.equal [
       [ 'Registering Middleware: MyMiddleware' ],
       [ 'Subclass called' ]
     ]
