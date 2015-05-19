@@ -1,12 +1,16 @@
-module.exports = (SpurErrors, Logger, BaseMiddleware)->
+module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware)->
 
   new class ErrorMiddleware extends BaseMiddleware
 
     configure:(@app)->
       super
+      @app.use @throwNotFoundError
       @app.use @middleware(@)
 
-    middleware:(self)-> (err, req, res, next)->
+    throwNotFoundError:(req, res, next)->
+      next(SpurErrors.NotFoundError.create("Not Found"))
+
+    middleware:(self)-> (err, req, res, next)=>
       Logger.error(err)
       Logger.error(err.stack)
       Logger.error(err.data) if err.data
@@ -17,12 +21,18 @@ module.exports = (SpurErrors, Logger, BaseMiddleware)->
       res.status(err.statusCode)
 
       res.format
-        text:()->
-          res.send(err.message)
+        text:()=>
+          @sendTextResponse(err, req, res)
         html:()=>
-          self.htmlErrorRender(res, err)
-        json:()->
-          res.json({error:err.message, data:err.data})
+          @sendHtmlResponse(err, req, res)
+        json:()=>
+          @sendJsonResponse(err, req, res)
 
-    htmlErrorRender:(res, error)=>
-      res.send(error.stack)
+    sendTextResponse: (err, req, res)->
+      res.send(err.message)
+
+    sendHtmlResponse: (err, req, res)->
+      HtmlErrorRender.render(err, req, res)
+
+    sendJsonResponse: (err, req, res)->
+      res.json({error: err.message, data: err.data})
