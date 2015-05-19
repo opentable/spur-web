@@ -17,6 +17,7 @@ module.exports = ()->
   }
 
   ioc.registerFolders __dirname, [
+    "handlers"
     "middleware",
     "webserver"
   ]

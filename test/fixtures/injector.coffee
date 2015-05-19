@@ -10,6 +10,10 @@ module.exports = () ->
 
   registerConfig(ioc, path.join(__dirname, "config"))
 
+  ioc.registerFolders __dirname, [
+    "controllers"
+  ]
+
   ioc.merge(spurCommon())
   ioc.merge(localInjector())
 

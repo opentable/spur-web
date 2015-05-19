@@ -2,7 +2,6 @@ describe "BaseWebServer", ->
 
   beforeEach ->
 
-
     injector()
       .addResolvableDependency "IndexController", (BaseController)->
         new class IndexController extends BaseController
