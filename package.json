@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app. Extends the 'spur-common' NPM module.",
   "main": "index.js",
   "scripts": {
