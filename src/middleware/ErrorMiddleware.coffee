@@ -11,9 +11,7 @@ module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware)->
       next(SpurErrors.NotFoundError.create("Not Found"))
 
     middleware:(self)-> (err, req, res, next)=>
-      Logger.error(err)
-      Logger.error(err.stack)
-      Logger.error(err.data) if err.data
+      Logger.error(err, "\n", err.stack, "\n", (err.data or ""))
 
       unless err.statusCode
         err = SpurErrors.InternalServerError.create(err.message, err)
