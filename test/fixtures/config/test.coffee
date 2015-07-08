@@ -1,5 +1,5 @@
 module.exports = ()->
 
   @properties
-
-    RootWebPath   : "/user/agustin/test/"
+    Port: 9088
+    RootWebPath : "/user/agustin/test/"
