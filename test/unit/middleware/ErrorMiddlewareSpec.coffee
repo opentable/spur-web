@@ -15,6 +15,7 @@ describe "ErrorMiddleware", ->
       sinon.spy @ErrorMiddleware, "sendJsonResponse"
 
       @InternalServerError = "http://localhost:#{@mockPort}/500-error-test"
+      @InternalServerStandardError = "http://localhost:#{@mockPort}/500-standard-error-test"
       @NotFoundError = "http://localhost:#{@mockPort}/404-error-test"
       @NotFoundErrorUndefined = "http://localhost:#{@mockPort}/cant-find-this-path"
 
@@ -39,23 +40,47 @@ describe "ErrorMiddleware", ->
         "Express server stopped"
       ]
 
-  describe "server errors", ->
+  describe "server errors with SpurErrors", ->
 
     it "should attempt to render an html request", ->
       @sendRequest("text/html", @InternalServerError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
         expect(@HtmlErrorRender.render.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
 
     it "should attempt to render an json request", ->
       @sendRequest("application/json", @InternalServerError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
 
     it "should attempt to render an text request", ->
       @sendRequest("text/plain", @InternalServerError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
+
+  describe "server errors with standard throw", ->
+
+    it "should attempt to render an html request", ->
+      @sendRequest("text/html", @InternalServerStandardError).error (response)=>
+        expect(response.statusCode).to.equal(500)
+        expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
+        expect(@HtmlErrorRender.render.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
+
+    it "should attempt to render an json request", ->
+      @sendRequest("application/json", @InternalServerStandardError).error (response)=>
+        expect(response.statusCode).to.equal(500)
+        expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
+
+    it "should attempt to render an text request", ->
+      @sendRequest("text/plain", @InternalServerStandardError).error (response)=>
+        expect(response.statusCode).to.equal(500)
+        expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.exist
 
   describe "not found errors", ->
 
@@ -64,16 +89,20 @@ describe "ErrorMiddleware", ->
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
         expect(@HtmlErrorRender.render.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
 
     it "should attempt to render an json request", ->
       @sendRequest("application/json", @NotFoundError).error (response)=>
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
 
     it "should attempt to render an text request", ->
       @sendRequest("text/plain", @NotFoundError).error (response)=>
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
+
 
   describe "not found errors from undefined", ->
 
@@ -82,13 +111,16 @@ describe "ErrorMiddleware", ->
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
         expect(@HtmlErrorRender.render.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
 
     it "should attempt to render an json request", ->
       @sendRequest("application/json", @NotFoundErrorUndefined).error (response)=>
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
 
     it "should attempt to render an text request", ->
       @sendRequest("text/plain", @NotFoundErrorUndefined).error (response)=>
         expect(response.statusCode).to.equal(404)
         expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
+        expect(@Logger.recorded.error).to.not.exist
