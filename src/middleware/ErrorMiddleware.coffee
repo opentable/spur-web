@@ -34,7 +34,7 @@ module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, _)->
     logErrorStack: (err)=>
       statusCode = err.statusCode or 0
 
-      if _.contains(@EXCLUDE_STATUSCODE_FROM_LOGS, statusCode) is false
+      unless _.contains(@EXCLUDE_STATUSCODE_FROM_LOGS, statusCode)
         Logger.error(err, "\n", err.stack, "\n", (err.data or ""))
 
     sendTextResponse: (err, req, res)->
