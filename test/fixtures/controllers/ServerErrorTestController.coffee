@@ -2,13 +2,17 @@ module.exports = (BaseController, SpurErrors)->
 
   new class ServerErrorTestController extends BaseController
 
-    configure:(app)->
+    configure: (app)->
       super
       app.get "/500-error-test", @getErrorTest
+      app.get "/500-standard-error-test", @getStandardErrorTest
       app.get "/404-error-test", @getNotFoundErrorTest
 
-    getErrorTest:(req, res)=>
+    getErrorTest: (req, res)=>
       throw SpurErrors.InternalServerError.create("Some dumb server error")
 
-    getNotFoundErrorTest:()=>
+    getStandardErrorTest: (req, res)=>
+      throw "Some dumb server error"
+
+    getNotFoundErrorTest: ()=>
       throw SpurErrors.NotFoundError.create("Some dumb not found error")
