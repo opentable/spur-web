@@ -34,6 +34,10 @@ describe "ErrorMiddleware", ->
             .set({'Accept': accept})
             .promise()
 
+      @assertError = (expectUrl)->
+        lastCall = @_.last(@Logger.recorded?.error)
+        expect(lastCall[4].url).to.equal expectUrl
+
   afterEach ()->
     @webServer?.stop().then =>
       expect(@_.last(@Logger.recorded.log)).to.deep.equal [
@@ -47,19 +51,19 @@ describe "ErrorMiddleware", ->
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
         expect(@HtmlErrorRender.render.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-error-test")
 
     it "should attempt to render an json request", ->
       @sendRequest("application/json", @InternalServerError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-error-test")
 
     it "should attempt to render an text request", ->
       @sendRequest("text/plain", @InternalServerError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-error-test")
 
   describe "server errors with standard throw", ->
 
@@ -68,19 +72,19 @@ describe "ErrorMiddleware", ->
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendHtmlResponse.called).to.equal(true)
         expect(@HtmlErrorRender.render.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-standard-error-test")
 
     it "should attempt to render an json request", ->
       @sendRequest("application/json", @InternalServerStandardError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendJsonResponse.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-standard-error-test")
 
     it "should attempt to render an text request", ->
       @sendRequest("text/plain", @InternalServerStandardError).error (response)=>
         expect(response.statusCode).to.equal(500)
         expect(@ErrorMiddleware.sendTextResponse.called).to.equal(true)
-        expect(@Logger.recorded.error).to.exist
+        @assertError("/500-standard-error-test")
 
   describe "not found errors", ->
 
