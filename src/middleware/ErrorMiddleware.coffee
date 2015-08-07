@@ -16,10 +16,11 @@ module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, _)->
 
     middleware:(self)-> (err, req, res, next)=>
 
-      @logErrorStack(err)
-
       unless err.statusCode
         err = SpurErrors.InternalServerError.create(err.message, err)
+
+      @appendRequestData(err, req)
+      @logErrorStack(err)
 
       res.status(err.statusCode)
 
@@ -36,6 +37,12 @@ module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, _)->
 
       unless _.contains(@EXCLUDE_STATUSCODE_FROM_LOGS, statusCode)
         Logger.error(err, "\n", err.stack, "\n", (err.data or ""))
+
+    appendRequestData: (err, req)->
+      err.data ?= {}
+      err.data = _.extend err.data, {
+        url: req.url
+      }
 
     sendTextResponse: (err, req, res)->
       res.send(err.message)
