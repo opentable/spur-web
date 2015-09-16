@@ -3,18 +3,9 @@ describe "WinstonRequestLoggingMiddleware", ->
   beforeEach ()->
     @MockPort = 9088
 
-    @MockController = (BaseController)->
-
-      new class MockController extends BaseController
-
-        configure:(@app)->
-          super
-          @app.get "/", (req, res)-> res.send "SomeIndex"
-
     injector()
-      .addResolvableDependency("MockController", @MockController)
       .inject (@WinstonRequestLoggingMiddleware, @expressWinston, @express,
-        @HTTPService, @Logger, @config, @_, @BaseWebServer, @colors)=>
+        @HTTPService, @Logger, @config, @_, @BaseWebServer, @colors, @MockController)=>
         sinon.spy @expressWinston, "logger"
         @app = @express()
         @Logger.useNoop()
@@ -77,8 +68,7 @@ describe "WinstonRequestLoggingMiddleware", ->
     beforeEach ->
       @startServerOnPort = ()=>
         @Logger.useRecorder()
-        @webServer =
-          new class WebServer extends @BaseWebServer
+        @webServer = new class WebServer extends @BaseWebServer
 
         @webServer.start()
 
@@ -95,6 +85,7 @@ describe "WinstonRequestLoggingMiddleware", ->
           lastEntry = @_.last(@Logger.recorded.log)
           message = @colors.strip(lastEntry[1])
           data = lastEntry[2]
+
           expectedData = {
             "req": {
               "headers": {
@@ -123,8 +114,9 @@ describe "WinstonRequestLoggingMiddleware", ->
       @config.WinstonWebLogging = {expressFormat: true, meta: false}
 
       @startServerOnPort().then =>
-        @HTTPService.get("http://localhost:#{@MockPort}").promise().then (res)=>
 
+
+        @HTTPService.get("http://localhost:#{@MockPort}").promise().then (res)=>
           lastEntry = @_.last(@Logger.recorded.log)
           message = @colors.strip(lastEntry[1])
           data = lastEntry[2]
@@ -134,4 +126,19 @@ describe "WinstonRequestLoggingMiddleware", ->
           expect(message).to.contain "GET / 200"
           expect(data).to.deep.equal expectedData
 
+    it "should log a winston request with meta for error", ->
 
+      @config.WinstonWebLogging = {expressFormat: true, meta: false}
+
+      @startServerOnPort().then =>
+
+        @HTTPService.get("http://localhost:#{@MockPort}/with-error").promise().error (res)=>
+
+          lastEntry = @_.last(@Logger.recorded.log)
+          message = @colors.strip(lastEntry[1])
+          data = lastEntry[2]
+          expectedData = {}
+
+          expect(lastEntry[0]).to.equal "info"
+          expect(message).to.contain "GET /with-error 500"
+          expect(data).to.deep.equal expectedData
