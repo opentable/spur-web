@@ -32,6 +32,8 @@ module.exports = (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, _)->
         json:()=>
           @sendJsonResponse(err, req, res)
 
+      next()
+
     logErrorStack: (err)->
       statusCode = err.statusCode or 0
 
