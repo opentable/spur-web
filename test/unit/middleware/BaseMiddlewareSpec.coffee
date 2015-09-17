@@ -5,11 +5,6 @@ describe "BaseMiddleware", ->
 
       @Logger.useRecorder()
 
-
-
-  it "should exist", ->
-    expect(@BaseMiddleware).to.exist
-
   it "should log subclass registration", ->
     self = this
     myMiddleware =
@@ -22,8 +17,10 @@ describe "BaseMiddleware", ->
 
     myMiddleware.configure("app")
     expect(@Logger.recorded.log).to.deep.equal [
-      [ 'Registering Middleware: MyMiddleware' ],
       [ 'Subclass called' ]
+    ]
+    expect(@Logger.recorded.info).to.deep.equal [
+      [ 'Registering Middleware: MyMiddleware' ]
     ]
 
 
