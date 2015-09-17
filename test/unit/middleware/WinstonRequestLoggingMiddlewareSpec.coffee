@@ -74,7 +74,7 @@ describe "WinstonRequestLoggingMiddleware", ->
 
     afterEach ->
       @webServer?.stop().then =>
-        expect(@_.last(@Logger.recorded.log)).to.deep.equal [
+        expect(@_.last(@Logger.recorded.info)).to.deep.equal [
           "Express server stopped"
         ]
 

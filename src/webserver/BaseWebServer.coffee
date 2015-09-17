@@ -44,7 +44,7 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
 
     startInternal:()-> new Promise (resolve, reject)=>
       @server = @app.listen config.Port, ()=>
-        Logger.log @startedMessage()
+        Logger.info @startedMessage()
         resolve()
 
       Promise.promisifyAll(@server)
@@ -52,7 +52,7 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
     stop:()->
       (@server?.closeAsync?() or Promise.resolve())
         .finally =>
-          Logger.log "Express server stopped"
+          Logger.info "Express server stopped"
 
 
     startedMessage:()->
@@ -63,5 +63,5 @@ module.exports = (express, DefaultMiddleware, PromiseMiddleware, Logger, Promise
 
     logSectionHeader: (message)->
       Logger.log "========================"
-      Logger.log "= #{message}"
+      Logger.info "= #{message}"
       Logger.log "========================"
