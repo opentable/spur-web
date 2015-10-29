@@ -15,7 +15,6 @@ The Spur Framework is a collection of commonly used Node.JS libraries used to cr
 
 - [Quick start](#quick-start)
     - [Usage](#usage)
-- [API Reference](API.md)
 - [Available dependencies in injector](#available-dependencies-in-injector)
 - [Contributing](#contributing)
 - [License](#license)
@@ -158,28 +157,43 @@ injector().inject (UncaughtHander, Logger)->
 
 To see the latest list of the default dependencies that are injected, check out the [injector.coffee](src/injector.coffee) file. Here is a short list of of all of the dependencies available:
 
-### System dependencies
-
-| Name  | Original Module Name | Description |
-| :---- | :----                | :----       |
-|       |                      |             |
-
-
 ### Libraries
 
 List of external dependencies used and exposed by spur-web. They can be found at npmjs.org using their original names.
 
-| Name    | Original Module Name                     |
-| :----   | :----                                    |
-| **dep** | [dep](https://www.npmjs.org/package/dep) |
+| Name               | Original Module Name                                             |
+| :----              | :----                                                            |
+| **express**        | [express](https://www.npmjs.org/package/express)                 |
+| **expressDevice**  | [express-device](https://www.npmjs.org/package/express-device)   |
+| **methodOverride** | [method-override](https://www.npmjs.org/package/method-override) |
+| **cookieParser**   | [cookie-parser](https://www.npmjs.org/package/cookie-parser)     |
+| **bodyParser**     | [body-parser](https://www.npmjs.org/package/body-parser)         |
+| **expressWinston** | [express-winston](https://www.npmjs.org/package/express-winston) |
+| **ejs**            | [ejs](https://www.npmjs.org/package/ejs)                         |
 
 ### Local dependecies
 
 All of the files under the `src/` directory are made available when this module is merged into another injector. The following list are the notable dependencies available.
 
-| Name    | Source                      | Description |
-| :----   | :----                       | :----       |
-| **dep** | [code](src/core/dep.coffee) | desc        |
+#### Reusable
+
+| Name                       | Source                                              | Description                                                                                                 |
+| :----                      | :----                                               | :----                                                                                                       |
+| **BaseController**         | [code](src/webserver/BaseController.coffee)         | A base class in order to be able to identify all of the controllers derived from it.                        |
+| **BaseWebServer**          | [code](src/webserver/BaseWebServer.coffee)          | A base web server that sets all of the middleware mentioned here.                                           |
+| **ControllerRegistration** | [code](src/webserver/ControllerRegistration.coffee) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` |
+| **BaseMiddleware**         | [code](src/middleware/BaseMiddleware.coffee)        | A base class in order to be able to identify all of the middleware derived from it.                         |
+
+#### Used internally, but can be used/replaced
+
+| Name                                | Source                                                        | Description                                                                                           |
+| :----                               | :----                                                         | :----                                                                                                 |
+| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.coffee)                   | Sets basic error rendering for uncaught errors.                                                       |
+| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.coffee)               | Registers default express middleware: cookie parser, body parser, method override, and express device |
+| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.coffee)                 | Adds error handling for unhandled errors for requests.                                                |
+| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.coffee)               | Middleware for no cache headers |
+| **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.coffee)               | Extends the response object with functionality to be used through promises. It unwraps promises as they are being resolved. |
+| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.coffee) | Winston middleware for logging every request to the console log. |
 
 
 # Contributing
