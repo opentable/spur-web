@@ -10,7 +10,6 @@ describe "WinstonRequestLoggingMiddleware", ->
         @app = @express()
         @Logger.useNoop()
 
-
   afterEach ()->
     @expressWinston.logger.restore()
 
@@ -114,7 +113,6 @@ describe "WinstonRequestLoggingMiddleware", ->
       @config.WinstonWebLogging = {expressFormat: true, meta: false}
 
       @startServerOnPort().then =>
-
 
         @HTTPService.get("http://localhost:#{@MockPort}").promise().then (res)=>
           lastEntry = @_.last(@Logger.recorded.log)
