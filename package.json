@@ -38,7 +38,7 @@
   },
   "homepage": "https://github.com/opentable/spur-web",
   "dependencies": {
-    "spur-ioc": "latest",
+    "spur-ioc": "^0.1.2",
     "body-parser": "^1.10.2",
     "cookie-parser": "^1.3.3",
     "express": "^4.11.1",
@@ -46,7 +46,7 @@
     "express-winston": "^0.2.12",
     "method-override": "^2.3.1",
     "ejs": "^2.2.3",
-    "coffee-script": "^1.9.0"
+    "coffee-script": "^1.9.1"
   },
   "devDependencies": {
     "spur-common": "latest",
