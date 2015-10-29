@@ -14,8 +14,8 @@ describe "BaseMiddleware", ->
           super
           self.Logger.log("Subclass called")
 
-
     myMiddleware.configure("app")
+
     expect(@Logger.recorded.log).to.deep.equal [
       [ 'Subclass called' ]
     ]

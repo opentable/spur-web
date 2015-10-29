@@ -11,6 +11,9 @@ module.exports = () ->
 
   registerConfig(ioc, path.join(__dirname, "config"))
 
+  ioc.merge(spurCommon())
+  ioc.merge(localInjector())
+
   ioc.registerFolders __dirname, [
     "controllers"
   ]
@@ -18,8 +21,5 @@ module.exports = () ->
   ioc.registerDependencies {
     colors: colors
   }
-
-  ioc.merge(spurCommon())
-  ioc.merge(localInjector())
 
   ioc
