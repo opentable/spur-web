@@ -46,11 +46,11 @@
     "express-winston": "^0.2.12",
     "method-override": "^2.3.1",
     "ejs": "^2.2.3",
-    "coffee-script": "1.9.1"
+    "coffee-script": "^1.9.1"
   },
   "devDependencies": {
-    "spur-common": "latest",
-    "spur-config": "latest",
+    "spur-common": "^0.2.0",
+    "spur-config": "^0.1.2",
     "chai": "^1.10.0",
     "sinon": "^1.12.2",
     "mocha": "^2.1.0",
