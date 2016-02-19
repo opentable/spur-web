@@ -91,7 +91,6 @@ describe "WinstonRequestLoggingMiddleware", ->
                 "accept-encoding": "gzip, deflate"
                 "connection": "close"
                 "host": "localhost:9088"
-                "user-agent": "node-superagent/0.21.0"
               }
               "httpVersion": "1.1"
               "method": "GET"
@@ -104,6 +103,8 @@ describe "WinstonRequestLoggingMiddleware", ->
             }
             "responseTime": data.responseTime
           }
+
+          delete data.req.headers["user-agent"]
 
           expect(lastEntry[0]).to.equal "info"
           expect(message).to.equal "GET / 200 #{data.responseTime}ms"
