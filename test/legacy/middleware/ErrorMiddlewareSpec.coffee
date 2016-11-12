@@ -6,7 +6,7 @@ describe "ErrorMiddleware", ->
 
     nock.enableNetConnect()
 
-    injector().inject (@ErrorMiddleware, @HTTPService, @BaseWebServer, @HtmlErrorRender, @Logger, @config, @_)=>
+    injector().inject (@ErrorMiddleware, @HTTPService, @TestWebServer, @HtmlErrorRender, @Logger, @config, @_)=>
       @mockPort = 9080
 
       sinon.spy @HtmlErrorRender, "render"
@@ -19,13 +19,11 @@ describe "ErrorMiddleware", ->
       @NotFoundError = "http://localhost:#{@mockPort}/404-error-test"
       @NotFoundErrorUndefined = "http://localhost:#{@mockPort}/cant-find-this-path"
 
-      @webServer = new class WebServer extends @BaseWebServer
-        registerLoggingMiddleware:()->
 
       @startServerOnPort = (port)=>
         @config.Port = port
         @Logger.useRecorder()
-        @webServer.start()
+        @TestWebServer.start()
 
       @sendRequest = (accept, url)->
         @startServerOnPort(@mockPort).then =>
@@ -39,7 +37,7 @@ describe "ErrorMiddleware", ->
         expect(lastCall[4].url).to.equal expectUrl
 
   afterEach ()->
-    @webServer?.stop().then =>
+    @TestWebServer?.stop().then =>
       expect(@_.last(@Logger.recorded.info)).to.deep.equal [
         "Express server stopped"
       ]

@@ -1,19 +1,19 @@
-describe('BaseWebServer', function () {
+describe('BaseTestWebServer', function () {
   beforeEach(() => {
-    injector().inject((WebServer, config, HTTPService, Logger) => {
-      this.WebServer = WebServer;
+    injector().inject((TestWebServer, config, HTTPService, Logger) => {
+      this.TestWebServer = TestWebServer;
       this.config = config;
       this.HTTPService = HTTPService;
       this.Logger = Logger;
 
       this.Logger.useRecorder();
 
-      this.WebServer.start();
+      this.TestWebServer.start();
     });
   });
 
   afterEach(() => {
-    this.WebServer.stop();
+    this.TestWebServer.stop();
   });
 
   it('get index', (done) => {

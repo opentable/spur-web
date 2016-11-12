@@ -1,12 +1,12 @@
 describe "BaseWebServer", ->
 
   beforeEach () ->
-    injector().inject (@WebServer, @config, @Utils, @HTTPService, @Logger, @_)=>
+    injector().inject (@TestWebServer, @config, @Utils, @HTTPService, @Logger, @_)=>
       @Logger.useRecorder()
-      @WebServer.start()
+      @TestWebServer.start()
 
   afterEach () ->
-    @WebServer.stop()
+    @TestWebServer.stop()
 
   it "get index", (done) ->
     @HTTPService.get("http://localhost:9088/").promise().then (res)=>
