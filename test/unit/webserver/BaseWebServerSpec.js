@@ -1,12 +1,10 @@
 describe('BaseWebServer', function () {
   beforeEach(() => {
-    injector().inject((WebServer, config, Utils, HTTPService, Logger, _) => {
+    injector().inject((WebServer, config, HTTPService, Logger) => {
       this.WebServer = WebServer;
       this.config = config;
-      this.Utils = Utils;
       this.HTTPService = HTTPService;
       this.Logger = Logger;
-      this._ = _;
 
       this.Logger.useRecorder();
 
