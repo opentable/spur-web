@@ -2,7 +2,7 @@ describe "PromiseMiddleware", ->
 
   beforeEach (done)->
     injector()
-    .inject (@WebServer, @HTTPService, @Logger, @config) =>
+    .inject (@TestWebServer, @HTTPService, @Logger, @config) =>
       @Logger.useRecorder()
 
       @getResponse = (type) =>
@@ -10,10 +10,10 @@ describe "PromiseMiddleware", ->
         @HTTPService
           .get(url)
 
-      @WebServer.start().then(done)
+      @TestWebServer.start().then(done)
 
   afterEach ()->
-    @WebServer.stop()
+    @TestWebServer.stop()
 
   it "jsonAsync - success", (done) ->
     @getResponse("jsonasync").promise().then (response)=>
