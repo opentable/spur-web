@@ -11,5 +11,3 @@ module.exports = (BaseWebServer, Logger, path) ->
 
       @app.set('view engine', 'ejs')
       @app.set('views', path.join(__dirname, "../views"))
-
-    registerLoggingMiddleware: ->
