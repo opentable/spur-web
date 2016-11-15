@@ -16,6 +16,7 @@ module.exports = () ->
 
   ioc.registerFolders __dirname, [
     "controllers/",
+    "middleware/",
     "runtime/"
   ]
 

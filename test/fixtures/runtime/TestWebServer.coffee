@@ -1,6 +1,6 @@
 module.exports = (BaseWebServer, Logger, path) ->
 
-  new class WebServer extends BaseWebServer
+  new class TestWebServer extends BaseWebServer
 
     registerDefaultMiddleware: ->
       super
