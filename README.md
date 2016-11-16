@@ -25,7 +25,6 @@ The Spur Framework is a collection of commonly used Node.JS libraries used to cr
 
 `Dependencies:`
 ```bash
-$ npm install --save coffee-script
 $ npm install --save spur-ioc spur-common spur-config
 ```
 
@@ -34,7 +33,7 @@ $ npm install --save spur-ioc spur-common spur-config
 $ npm install --save spur-web
 ```
 
-* Note: Coffee-script is not required, but for the simplification of the examples, we are using coffee-script. ES5 and ES6 can also be used.
+**Note:** The example code below expects that you are using Node 6. The library works for versions older than Node 4, but only tested with the Node versions still supported under the [Node LTS schedule](https://github.com/nodejs/LTS).
 
 ## Usage
 
@@ -42,51 +41,60 @@ This example shows one of the most basic examples of setting up a spur web serve
 
 #### `src/config/*`
 
-For an example of the configuration, please take a look at this example: [spur-example/spur-web/src/config/](https://github.com/opentable/spur-examples/tree/master/spur-web/src/config)
+For an example of the configuration, please take a look at this example: [example/src/config/](example/src/config).
 
-#### `src/injector.coffee`
+#### `src/injector.js`
 
-```coffeescript
-spur       = require "spur-ioc"
-spurWeb    = require "spur-web"
-spurCommon = require "spur-common"
+```javascript
+const path = require('path');
+const spur = require('spur-ioc');
+const spurCommon = require('spur-common');
+const registerConfig = require('spur-common/registerConfig');
+const spurWeb = require('spur-web');
 
-module.exports = ()->
+module.exports = function () {
+  const ioc = spur.create('example');
 
-  ioc = spur.create("demo")
+  // Register configuration
+  registerConfig(ioc, path.join(__dirname, './config'));
 
-  # Register configuration
-  registerConfig(ioc, path.join(__dirname, "./config"))
 
-  ioc.merge(spurCommon())
-  ioc.merge(spurWeb())
+  ioc.merge(spurCommon());
+  ioc.merge(spurWeb());
 
-  # register folders in your project to be auto-injected
-  ioc.registerFolders __dirname, [
-    "controllers/",
-    "runtime/",
-  ]
+  // register folders in your project to be auto-injected
+  ioc.registerFolders(__dirname, [
+    'controllers/',
+    'runtime/'
+  ]);
 
-  ioc
+  return ioc;
+};
 ```
 
-#### `src/runtime/WebServer.coffee`
+#### `src/runtime/WebServer.js`
 
-```coffeescript
-module.exports = (BaseWebServer, path, Logger, HtmlErrorRenderExtension)->
+```javascript
+module.exports = function (BaseWebServer, path) {
+  class WebServer extends BaseWebServer {
 
-  new class WebServer extends BaseWebServer
+    // Add additional changes to the middleware by overriding the method
+    registerDefaultMiddleware() {
+      super.registerDefaultMiddleware();
+      this.registerEjsTemplates();
+    }
 
-    # Add additional changes to the middleware by overriding the method
-    registerDefaultMiddleware: ->
-      super
+    registerEjsTemplates() {
+      this.logSectionHeader('EJS Template Registration');
 
-    registerEjsTemplates: ->
+      this.app.set('view engine', 'ejs');
+      this.app.set('views', path.join(__dirname, '../views'));
+    }
+  }
 
-      @logSectionHeader("EJS Template Registration")
-
-      @app.set('view engine', 'ejs')
-      @app.set('views', path.join(__dirname, "../views"))
+  // Assure there is just one instance
+  return new WebServer();
+};
 ```
 
 #### `src/views/hello.ejs`
@@ -97,65 +105,73 @@ module.exports = (BaseWebServer, path, Logger, HtmlErrorRenderExtension)->
      <meta charset="utf-8">
   </head>
 <body>
-
-  <h1><%= data.user %></h1>
-
+  <h1><%= user %></h1>
 </body>
 </html>
 ```
 
-#### `src/controllers/HelloController.coffee`
+#### `src/controllers/HelloController.js`
 
-Files ending in `*Controller.coffee` are auto registered as controllers.
-
-```coffeescript
-module.exports = (BaseController)->
-
-  new class HelloController extends BaseController
-
-    configure:(app)->
-      super
-
-      app.get "/", @getRoot
-      app.get "/hello", @getHello
-
-    getRoot: (req, res, next)=>
-      res.status(200).send("This is the root page defined in HelloController.coffee.")
-
-    getHello: (req, res, next)=>
-      model = {
-        user: req.query.user or "John Doe"
-      }
-
-      res.render "hello.ejs", model
-```
-
-#### `start.coffee`
+Files ending in `*Controller.js` are auto registered as controllers.
 
 ```javascript
-injector = require "./src/injector"
+module.exports = function (BaseController) {
+  class HelloController extends BaseController {
 
-injector().inject (UncaughtHander, Logger)->
+    configure(app) {
+      super.configure(app);
 
-  UncaughtHander.listen()
+      app.get('/', this.getRoot.bind(this));
+      app.get('/hello', this.getHello.bind(this));
+    }
 
-  BuildDetailsService.initialize()
-  .then (details)->
+    getRoot(req, res) {
+      res.status(200).send('This is the root page defined in HelloController.js.');
+    }
 
-    Logger.info "BUILD VERSION: #{details.buildVersion}"
-    Logger.info "NODE_ENV: #{nodeProcess.env.NODE_ENV}"
-    Logger.info "PORT: #{config.Port}"
-    Logger.info "CONFIG: #{configLoader.configName}"
+    getHello(req, res) {
+      const model = {
+        user: req.query.user || 'John Doe'
+      };
 
-    WebServer.start()
-    .then ->
-      # Execute other logic after the server has started
+      res.render('hello', model);
+    }
 
+  }
+
+  return new HelloController();
+};
+```
+
+#### `start.js`
+
+```javascript
+const injector = require('./src/injector');
+
+// IMPORTANT: The callback needs to be a function call vs. using a fat-arrow block. Fat-arrow is not supported yet.
+injector().inject(function (UncaughtHandler, WebServer, Logger, config, configLoader, nodeProcess) {
+  UncaughtHandler.listen();
+
+  Logger.info(`NODE_ENV: ${nodeProcess.env.NODE_ENV}`);
+  Logger.info(`PORT: ${config.Port}`);
+  Logger.info(`CONFIG: ${configLoader.configName}`);
+
+  WebServer.start()
+  .then(() => {
+    // Execute other logic after the server has started
+  });
+});
+```
+
+### Running example
+
+```shell
+$ npm start
 ```
 
 # Available dependencies in injector
 
-To see the latest list of the default dependencies that are injected, check out the [injector.coffee](src/injector.coffee) file. Here is a short list of of all of the dependencies available:
+To see the latest list of the default dependencies that are injected, check out the [injector.js](src/injector.js) file. Here is a short list of of all of the dependencies available:
 
 ### Libraries
 
@@ -179,21 +195,21 @@ All of the files under the `src/` directory are made available when this module 
 
 | Name                       | Source                                              | Description                                                                                                 |
 | :----                      | :----                                               | :----                                                                                                       |
-| **BaseController**         | [code](src/webserver/BaseController.coffee)         | A base class in order to be able to identify all of the controllers derived from it.                        |
-| **BaseWebServer**          | [code](src/webserver/BaseWebServer.coffee)          | A base web server that sets all of the middleware mentioned here.                                           |
-| **ControllerRegistration** | [code](src/webserver/ControllerRegistration.coffee) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` |
-| **BaseMiddleware**         | [code](src/middleware/BaseMiddleware.coffee)        | A base class in order to be able to identify all of the middleware derived from it.                         |
+| **BaseController**         | [code](src/webserver/BaseController.js)         | A base class in order to be able to identify all of the controllers derived from it.                        |
+| **BaseWebServer**          | [code](src/webserver/BaseWebServer.js)          | A base web server that sets all of the middleware mentioned here.                                           |
+| **ControllerRegistration** | [code](src/webserver/ControllerRegistration.js) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` |
+| **BaseMiddleware**         | [code](src/middleware/BaseMiddleware.js)        | A base class in order to be able to identify all of the middleware derived from it.                         |
 
 #### Used internally, but can be used/replaced
 
 | Name                                | Source                                                        | Description                                                                                           |
 | :----                               | :----                                                         | :----                                                                                                 |
-| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.coffee)                   | Sets basic error rendering for uncaught errors.                                                       |
-| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.coffee)               | Registers default express middleware: cookie parser, body parser, method override, and express device |
-| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.coffee)                 | Adds error handling for unhandled errors for requests.                                                |
-| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.coffee)               | Middleware for no cache headers |
-| **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.coffee)               | Extends the response object with functionality to be used through promises. It unwraps promises as they are being resolved. |
-| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.coffee) | Winston middleware for logging every request to the console log. |
+| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.js)                   | Sets basic error rendering for uncaught errors.                                                       |
+| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.js)               | Registers default express middleware: cookie parser, body parser, method override, and express device |
+| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.js)                 | Adds error handling for unhandled errors for requests.                                                |
+| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.js)               | Middleware for no cache headers |
+| **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.js)               | Extends the response object with functionality to be used through promises. It unwraps promises as they are being resolved. |
+| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.js) | Winston middleware for logging every request to the console log. |
 
 
 # Contributing
@@ -223,6 +239,3 @@ $ npm test
 # License
 
 [MIT](LICENSE)
-
-
-

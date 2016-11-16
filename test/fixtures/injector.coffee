@@ -15,7 +15,9 @@ module.exports = () ->
   ioc.merge(localInjector())
 
   ioc.registerFolders __dirname, [
-    "controllers"
+    "controllers/",
+    "middleware/",
+    "runtime/"
   ]
 
   ioc.registerDependencies {

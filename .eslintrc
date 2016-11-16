@@ -1,0 +1,6 @@
+{
+  "extends": "opentable",
+  "env": {
+    "node": true
+  }
+}
