@@ -13,6 +13,7 @@
     "test-unit-legacy": "babel-node --debug node_modules/mocha/bin/_mocha ./test/legacy/",
     "test-integration": "babel-node --debug node_modules/mocha/bin/_mocha ./test/integration/",
     "test": "npm run test-unit && npm run test-unit-legacy && npm run test-integration",
+    "start": "node example/start.js",
     "build-and-test": "npm run build && npm test"
   },
   "repository": {
