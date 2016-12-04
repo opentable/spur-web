@@ -10,9 +10,8 @@
     "lint": "eslint .",
     "pretest": "npm run lint",
     "test-unit": "babel-node --debug node_modules/mocha/bin/_mocha ./test/unit/",
-    "test-unit-legacy": "babel-node --debug node_modules/mocha/bin/_mocha ./test/legacy/",
     "test-integration": "babel-node --debug node_modules/mocha/bin/_mocha ./test/integration/",
-    "test": "npm run test-unit && npm run test-unit-legacy && npm run test-integration",
+    "test": "npm run test-unit && npm run test-integration",
     "start": "node example/start.js",
     "build-and-test": "npm run build && npm test"
   },
@@ -55,8 +54,7 @@
     "express-device": "^0.3.11",
     "express-winston": "^2.0.0",
     "method-override": "^2.3.1",
-    "ejs": "^2.2.3",
-    "coffee-script": "^1.10.0"
+    "ejs": "^2.2.3"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
