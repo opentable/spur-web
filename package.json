@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "0.4.1",
+  "version": "1.0.0-rc.1",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
   "main": "lib/injector",
   "jsnext:main": "./src/injector",
@@ -14,6 +14,10 @@
     "test": "npm run test-unit && npm run test-integration",
     "start": "node example/start.js",
     "build-and-test": "npm run build && npm test"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "tag": "next"
   },
   "repository": {
     "type": "git",
