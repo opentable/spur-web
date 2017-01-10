@@ -36,8 +36,9 @@ module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, 
 
     logErrorStack(err) {
       const statusCode = err.statusCode || 0;
+      const checkStatus = (status) => status === statusCode;
 
-      if (!_.contains(this.EXCLUDE_STATUSCODE_FROM_LOGS, statusCode)) {
+      if (!_.some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
         Logger.error(err, '\n', err.stack, '\n', (err.data || ''));
       }
     }

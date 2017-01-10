@@ -50,7 +50,7 @@ describe('ErrorMiddleware', function () {
 
   describe('server errors with SpurErrors', () => {
     it('should attempt to render an html request', () => {
-      return this.sendRequest('text/html', this.InternalServerError).error((response) => {
+      return this.sendRequest('text/html', this.InternalServerError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendHtmlResponse.called).to.equal(true);
         expect(this.HtmlErrorRender.render.called).to.equal(true);
@@ -59,7 +59,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an json request', () => {
-      return this.sendRequest('application/json', this.InternalServerError).error((response) => {
+      return this.sendRequest('application/json', this.InternalServerError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendJsonResponse.called).to.equal(true);
         this.assertError('/500-error-test');
@@ -67,7 +67,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an text request', () => {
-      return this.sendRequest('text/plain', this.InternalServerError).error((response) => {
+      return this.sendRequest('text/plain', this.InternalServerError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendTextResponse.called).to.equal(true);
         this.assertError('/500-error-test');
@@ -77,7 +77,7 @@ describe('ErrorMiddleware', function () {
 
   describe('server errors with standard throw', () => {
     it('should attempt to render an html request', () => {
-      return this.sendRequest('text/html', this.InternalServerStandardError).error((response) => {
+      return this.sendRequest('text/html', this.InternalServerStandardError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendHtmlResponse.called).to.equal(true);
         expect(this.HtmlErrorRender.render.called).to.equal(true);
@@ -86,7 +86,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an json request', () => {
-      return this.sendRequest('application/json', this.InternalServerStandardError).error((response) => {
+      return this.sendRequest('application/json', this.InternalServerStandardError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendJsonResponse.called).to.equal(true);
         this.assertError('/500-standard-error-test');
@@ -94,7 +94,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an text request', () => {
-      return this.sendRequest('text/plain', this.InternalServerStandardError).error((response) => {
+      return this.sendRequest('text/plain', this.InternalServerStandardError).catch((response) => {
         expect(response.statusCode).to.equal(500);
         expect(this.ErrorMiddleware.sendTextResponse.called).to.equal(true);
         this.assertError('/500-standard-error-test');
@@ -104,7 +104,7 @@ describe('ErrorMiddleware', function () {
 
   describe('not found errors', () => {
     it('should attempt to render an html request', () => {
-      return this.sendRequest('text/html', this.NotFoundError).error((response) => {
+      return this.sendRequest('text/html', this.NotFoundError).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendHtmlResponse.called).to.equal(true);
         expect(this.HtmlErrorRender.render.called).to.equal(true);
@@ -113,7 +113,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an json request', () => {
-      return this.sendRequest('application/json', this.NotFoundError).error((response) => {
+      return this.sendRequest('application/json', this.NotFoundError).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendJsonResponse.called).to.equal(true);
         expect(this.Logger.recorded.error).to.not.exist;
@@ -121,7 +121,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an text request', () => {
-      return this.sendRequest('text/plain', this.NotFoundError).error((response) => {
+      return this.sendRequest('text/plain', this.NotFoundError).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendTextResponse.called).to.equal(true);
         expect(this.Logger.recorded.error).to.not.exist;
@@ -131,7 +131,7 @@ describe('ErrorMiddleware', function () {
 
   describe('not found errors from undefined', () => {
     it('should attempt to render an html request', () => {
-      return this.sendRequest('text/html', this.NotFoundErrorUndefined).error((response) => {
+      return this.sendRequest('text/html', this.NotFoundErrorUndefined).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendHtmlResponse.called).to.equal(true);
         expect(this.HtmlErrorRender.render.called).to.equal(true);
@@ -140,7 +140,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an json request', () => {
-      return this.sendRequest('application/json', this.NotFoundErrorUndefined).error((response) => {
+      return this.sendRequest('application/json', this.NotFoundErrorUndefined).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendJsonResponse.called).to.equal(true);
         expect(this.Logger.recorded.error).to.not.exist;
@@ -148,7 +148,7 @@ describe('ErrorMiddleware', function () {
     });
 
     it('should attempt to render an text request', () => {
-      return this.sendRequest('text/plain', this.NotFoundErrorUndefined).error((response) => {
+      return this.sendRequest('text/plain', this.NotFoundErrorUndefined).catch((response) => {
         expect(response.statusCode).to.equal(404);
         expect(this.ErrorMiddleware.sendTextResponse.called).to.equal(true);
         expect(this.Logger.recorded.error).to.not.exist;
