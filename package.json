@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "1.0.0-rc.1",
+  "version": "0.4.1",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
   "main": "lib/injector",
   "jsnext:main": "./src/injector",
@@ -36,6 +36,10 @@
     "email": "agustin@colchado.com"
   },
   "contributors": [
+    {
+      "name": "Danielle Blank",
+      "email": "dgdblank@gmail.com"
+    },
     {
       "name": "Siavash Etemadieh",
       "email": "ssetem@googlemail.com"
@@ -74,7 +78,7 @@
     "mocha": "^2.1.0",
     "nock": "^8.0.0",
     "sinon": "^1.17.6",
-    "spur-common": ">1.0.0-rc",
+    "spur-common": "^1.0.0",
     "spur-config": "^1.0.0"
   }
 }
