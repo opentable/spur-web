@@ -153,7 +153,7 @@ describe('WinstonRequestLoggingMiddleware', function () {
       this.config.WinstonWebLogging = { expressFormat: true, meta: false };
 
       return this.startServer().then(() => {
-        return this.HTTPService.get('http://localhost:9088/with-error').promise().error((res) => {
+        return this.HTTPService.get('http://localhost:9088/with-error').promise().catch((res) => {
           const lastEntry = this._.last(this.Logger.recorded.log);
           const message = this.colors.strip(lastEntry[1]);
           const data = lastEntry[2];

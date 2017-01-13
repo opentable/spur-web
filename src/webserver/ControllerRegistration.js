@@ -11,7 +11,7 @@ module.exports = function ($injector, _, Logger, BaseController) {
       const registeredCount = _.chain(controllers)
         .values()
         .filter(instanceOfBaseController)
-        .invoke('configure', app)
+        .invokeMap('configure', app)
         .value().length;
 
       Logger.info(`Registered ${registeredCount} Controller(s)`, { count: registeredCount });
