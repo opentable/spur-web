@@ -16,8 +16,7 @@
     "build-and-test": "npm run build && npm test"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "tag": "next"
+    "registry": "https://registry.npmjs.org"
   },
   "repository": {
     "type": "git",
