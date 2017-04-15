@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
   "main": "lib/injector",
   "jsnext:main": "./src/injector",
