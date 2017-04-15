@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
   "main": "lib/injector",
   "jsnext:main": "./src/injector",
@@ -58,7 +58,7 @@
     "cookie-parser": "^1.3.3",
     "ejs": "^2.2.3",
     "express": "^4.11.1",
-    "express-device": "^0.3.11",
+    "express-device": "^0.4.2",
     "express-winston": "^2.0.0",
     "method-override": "^2.3.1",
     "spur-ioc": "^0.2.4",
