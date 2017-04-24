@@ -1,10 +1,17 @@
-module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
-  Logger, Promise, ErrorMiddleware, config, ControllerRegistration,
-  WinstonRequestLoggingMiddleware) {
+module.exports = function (express, https, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
+                          config, ControllerRegistration, WinstonRequestLoggingMiddleware, fs) {
   class BaseWebServer {
 
     constructor() {
       this.app = express();
+      if (config.Https) {
+        this.privateKey = fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8');
+        this.certificate = fs.readFileSync(config.Https.CertificateFilePath, 'utf8');
+        this.credentials = {
+          key: this.privateKey,
+          cert: this.certificate
+        };
+      }
     }
 
     getPort() {
@@ -12,6 +19,16 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
 
       if (this.server) {
         port = this.server.address().port || port;
+      }
+
+      return port;
+    }
+
+    getHttpsPort() {
+      let port = config.Https.Port;
+
+      if (this.server) {
+        port = this.httpsServer.address().port || port;
       }
 
       return port;
@@ -64,6 +81,12 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
     startInternal() {
       // eslint-disable-next-line no-unused-vars
       return new Promise((resolve, reject) => {
+        if (config.Https) {
+          this.httpsServer = https.createServer(this.credentials, this.app).listen(config.Https.Port, () => {
+            Logger.info(this.startedMessageHttps());
+            resolve();
+          });
+        }
         this.server = this.app.listen(config.Port, () => {
           Logger.info(this.startedMessage());
           resolve();
@@ -85,6 +108,14 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
       }
 
       return Promise.resolve();
+    }
+
+    startedMessageHttps() {
+      if (this.cluster) {
+        return `Worker ${this.cluster.worker.id} started on port ${this.getHttpsPort()}`;
+      }
+
+      return `https express server started on port ${this.getHttpsPort()}`;
     }
 
     startedMessage() {
