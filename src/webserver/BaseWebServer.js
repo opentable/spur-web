@@ -1,4 +1,4 @@
-module.exports = function (express, https, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
+module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
                           config, ControllerRegistration, WinstonRequestLoggingMiddleware, fs) {
   class BaseWebServer {
 
@@ -81,15 +81,38 @@ module.exports = function (express, https, DefaultMiddleware, PromiseMiddleware,
     startInternal() {
       // eslint-disable-next-line no-unused-vars
       return new Promise((resolve, reject) => {
-        if (config.Https) {
-          this.httpsServer = https.createServer(this.credentials, this.app).listen(config.Https.Port, () => {
-            Logger.info(this.startedMessageHttps());
-            resolve();
-          });
-        }
         this.server = this.app.listen(config.Port, () => {
           Logger.info(this.startedMessage());
-          resolve();
+
+          if (config.Https) {
+            https.createServer(this.credentials, (request, response) => {
+              const proxy = http.createClient(80, request.headers.host);
+              const proxyRequest = proxy.request(request.method, request.url, request.headers);
+
+              proxyRequest.addListener('response', (proxyResponse) => {
+                proxyResponse.addListener('data', (chunk) => {
+                  response.write(chunk, 'binary');
+                });
+
+                proxyResponse.addListener('end', () => {
+                  response.end();
+                });
+
+                response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
+              });
+
+              request.addListener('data', (chunk) => {
+                proxyRequest.write(chunk, 'binary');
+              });
+
+              request.addListener('end', () => {
+                proxyRequest.end();
+              });
+            }).listen(config.Https.Port, () => {
+              Logger.info(this.startedMessageHttps());
+              resolve();
+            });
+          } else resolve();
         });
 
         return Promise.promisifyAll(this.server);
