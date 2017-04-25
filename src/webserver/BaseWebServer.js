@@ -1,10 +1,17 @@
-module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
-  Logger, Promise, ErrorMiddleware, config, ControllerRegistration,
-  WinstonRequestLoggingMiddleware) {
+module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
+                          config, ControllerRegistration, WinstonRequestLoggingMiddleware, fs) {
   class BaseWebServer {
 
     constructor() {
       this.app = express();
+      if (config.Https) {
+        this.privateKey = fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8');
+        this.certificate = fs.readFileSync(config.Https.CertificateFilePath, 'utf8');
+        this.credentials = {
+          key: this.privateKey,
+          cert: this.certificate
+        };
+      }
     }
 
     getPort() {
@@ -12,6 +19,16 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
 
       if (this.server) {
         port = this.server.address().port || port;
+      }
+
+      return port;
+    }
+
+    getHttpsPort() {
+      let port = config.Https.Port;
+
+      if (this.server) {
+        port = this.httpsServer.address().port || port;
       }
 
       return port;
@@ -66,7 +83,36 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
       return new Promise((resolve, reject) => {
         this.server = this.app.listen(config.Port, () => {
           Logger.info(this.startedMessage());
-          resolve();
+
+          if (config.Https) {
+            https.createServer(this.credentials, (request, response) => {
+              const proxy = http.createClient(80, request.headers.host);
+              const proxyRequest = proxy.request(request.method, request.url, request.headers);
+
+              proxyRequest.addListener('response', (proxyResponse) => {
+                proxyResponse.addListener('data', (chunk) => {
+                  response.write(chunk, 'binary');
+                });
+
+                proxyResponse.addListener('end', () => {
+                  response.end();
+                });
+
+                response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
+              });
+
+              request.addListener('data', (chunk) => {
+                proxyRequest.write(chunk, 'binary');
+              });
+
+              request.addListener('end', () => {
+                proxyRequest.end();
+              });
+            }).listen(config.Https.Port, () => {
+              Logger.info(this.startedMessageHttps());
+              resolve();
+            });
+          } else resolve();
         });
 
         return Promise.promisifyAll(this.server);
@@ -85,6 +131,14 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
       }
 
       return Promise.resolve();
+    }
+
+    startedMessageHttps() {
+      if (this.cluster) {
+        return `Worker ${this.cluster.worker.id} started on port ${this.getHttpsPort()}`;
+      }
+
+      return `https express server started on port ${this.getHttpsPort()}`;
     }
 
     startedMessage() {
