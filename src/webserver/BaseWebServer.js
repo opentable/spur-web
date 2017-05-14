@@ -1,15 +1,9 @@
-module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
+module.exports = function (express, https, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
                           config, ControllerRegistration, WinstonRequestLoggingMiddleware, fs) {
   class BaseWebServer {
 
     constructor() {
       this.app = express();
-      if (config.Https) {
-        this.credentials = {
-          key: fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8'),
-          cert: fs.readFileSync(config.Https.CertificateFilePath, 'utf8')
-        };
-      }
     }
 
     getPort() {
@@ -83,8 +77,13 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
           Logger.info(this.startedMessage());
 
           if (config.Https) {
+            const credentials = {
+              key: fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8'),
+              cert: fs.readFileSync(config.Https.CertificateFilePath, 'utf8')
+            };
+
             this.httpsServer = https
-            .createServer(this.credentials, this.app)
+            .createServer(credentials, this.app)
             .listen(config.Https.Port, () => {
               Logger.info(this.startedMessageHttps());
               resolve();
@@ -106,7 +105,7 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
 
     getCloseAsync() {
       if (this.server && this.server.closeAsync) {
-        if (config.Https) {
+        if (this.httpsServer) {
           return Promise.all([this.server.closeAsync(), this.httpsServer.closeAsync()]);
         }
 
