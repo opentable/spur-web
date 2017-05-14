@@ -5,11 +5,9 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
     constructor() {
       this.app = express();
       if (config.Https) {
-        this.privateKey = fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8');
-        this.certificate = fs.readFileSync(config.Https.CertificateFilePath, 'utf8');
         this.credentials = {
-          key: this.privateKey,
-          cert: this.certificate
+          key: fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8'),
+          cert: fs.readFileSync(config.Https.CertificateFilePath, 'utf8')
         };
       }
     }
@@ -27,7 +25,7 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
     getHttpsPort() {
       let port = config.Https.Port;
 
-      if (this.server) {
+      if (this.httpsServer) {
         port = this.httpsServer.address().port || port;
       }
 
@@ -85,33 +83,14 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
           Logger.info(this.startedMessage());
 
           if (config.Https) {
-            https.createServer(this.credentials, (request, response) => {
-              const proxy = http.createClient(80, request.headers.host);
-              const proxyRequest = proxy.request(request.method, request.url, request.headers);
-
-              proxyRequest.addListener('response', (proxyResponse) => {
-                proxyResponse.addListener('data', (chunk) => {
-                  response.write(chunk, 'binary');
-                });
-
-                proxyResponse.addListener('end', () => {
-                  response.end();
-                });
-
-                response.writeHead(proxyResponse.statusCode, proxyResponse.headers);
-              });
-
-              request.addListener('data', (chunk) => {
-                proxyRequest.write(chunk, 'binary');
-              });
-
-              request.addListener('end', () => {
-                proxyRequest.end();
-              });
-            }).listen(config.Https.Port, () => {
+            this.httpsServer = https
+            .createServer(this.credentials, this.app)
+            .listen(config.Https.Port, () => {
               Logger.info(this.startedMessageHttps());
               resolve();
             });
+
+            Promise.promisifyAll(this.httpsServer);
           } else resolve();
         });
 
@@ -127,6 +106,10 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
 
     getCloseAsync() {
       if (this.server && this.server.closeAsync) {
+        if (config.Https) {
+          return Promise.all([this.server.closeAsync(), this.httpsServer.closeAsync()]);
+        }
+
         return this.server.closeAsync();
       }
 
@@ -135,10 +118,10 @@ module.exports = function (express, https, http, DefaultMiddleware, PromiseMiddl
 
     startedMessageHttps() {
       if (this.cluster) {
-        return `Worker ${this.cluster.worker.id} started on port ${this.getHttpsPort()}`;
+        return `HTTPS Worker ${this.cluster.worker.id} started on port ${this.getHttpsPort()}`;
       }
 
-      return `https express server started on port ${this.getHttpsPort()}`;
+      return `Express HTTPS endpoint available on port ${this.getHttpsPort()}`;
     }
 
     startedMessage() {

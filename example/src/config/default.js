@@ -9,10 +9,10 @@ module.exports = function () {
     // Move your 'key' and 'certificate' file in to "certificates/local/"
     // Uncomment Https
 
-    // Https: {
-    //   Port: 9001,
-    //   PrivateKeyFilePath: 'certificates/local/server.key',
-    //   CertificateFilePath: 'certificates/local/server.crt'
-    // }
+    Https: {
+      Port: 9009,
+      PrivateKeyFilePath: 'test/fixtures/certificates/server.key',
+      CertificateFilePath: 'test/fixtures/certificates/server.crt'
+    }
   });
 };
