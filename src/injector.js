@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import expressWinston from 'express-winston';
 import ejs from 'ejs';
+import https from 'https';
 
 module.exports = function injector() {
   const ioc = spur.create('spur-web');
@@ -18,7 +19,8 @@ module.exports = function injector() {
     cookieParser,
     bodyParser,
     expressWinston,
-    ejs
+    ejs,
+    https
   });
 
   ioc.registerFolders(__dirname, [

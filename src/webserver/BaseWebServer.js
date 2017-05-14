@@ -1,6 +1,5 @@
-module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
-  Logger, Promise, ErrorMiddleware, config, ControllerRegistration,
-  WinstonRequestLoggingMiddleware) {
+module.exports = function (express, https, DefaultMiddleware, PromiseMiddleware, Logger, Promise, ErrorMiddleware,
+                          config, ControllerRegistration, WinstonRequestLoggingMiddleware, fs) {
   class BaseWebServer {
 
     constructor() {
@@ -12,6 +11,16 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
 
       if (this.server) {
         port = this.server.address().port || port;
+      }
+
+      return port;
+    }
+
+    getHttpsPort() {
+      let port = config.Https.Port;
+
+      if (this.httpsServer) {
+        port = this.httpsServer.address().port || port;
       }
 
       return port;
@@ -66,7 +75,22 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
       return new Promise((resolve, reject) => {
         this.server = this.app.listen(config.Port, () => {
           Logger.info(this.startedMessage());
-          resolve();
+
+          if (config.Https) {
+            const credentials = {
+              key: fs.readFileSync(config.Https.PrivateKeyFilePath, 'utf8'),
+              cert: fs.readFileSync(config.Https.CertificateFilePath, 'utf8')
+            };
+
+            this.httpsServer = https
+            .createServer(credentials, this.app)
+            .listen(config.Https.Port, () => {
+              Logger.info(this.startedMessageHttps());
+              resolve();
+            });
+
+            Promise.promisifyAll(this.httpsServer);
+          } else resolve();
         });
 
         return Promise.promisifyAll(this.server);
@@ -81,10 +105,22 @@ module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
 
     getCloseAsync() {
       if (this.server && this.server.closeAsync) {
+        if (this.httpsServer) {
+          return Promise.all([this.server.closeAsync(), this.httpsServer.closeAsync()]);
+        }
+
         return this.server.closeAsync();
       }
 
       return Promise.resolve();
+    }
+
+    startedMessageHttps() {
+      if (this.cluster) {
+        return `HTTPS Worker ${this.cluster.worker.id} started on port ${this.getHttpsPort()}`;
+      }
+
+      return `Express HTTPS endpoint available on port ${this.getHttpsPort()}`;
     }
 
     startedMessage() {
