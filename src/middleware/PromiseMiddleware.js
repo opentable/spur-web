@@ -1,4 +1,7 @@
-module.exports = function (Promise, _, BaseMiddleware) {
+const _first = require('lodash.first');
+
+module.exports = function (Promise, BaseMiddleware) {
+
   class PromiseMiddleware extends BaseMiddleware {
 
     configure(app) {
@@ -24,7 +27,7 @@ module.exports = function (Promise, _, BaseMiddleware) {
 
       this.app.response.sendStatusAsync = function (...args) {
         return Promise.all(args)
-          .then((results) => this.sendStatus(_.first(results).status))
+          .then((results) => this.sendStatus(_first(results).status))
           .catch(this.req.next);
       };
 

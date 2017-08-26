@@ -1,12 +1,12 @@
-import spur from 'spur-ioc';
+const spur = require('spur-ioc');
 
-import express from 'express';
-import expressDevice from 'express-device';
-import methodOverride from 'method-override';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import expressWinston from 'express-winston';
-import ejs from 'ejs';
+const express = require('express');
+const expressDevice = require('express-device');
+const methodOverride = require('method-override');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const expressWinston = require('express-winston');
+const ejs = require('ejs');
 
 module.exports = function injector() {
   const ioc = spur.create('spur-web');

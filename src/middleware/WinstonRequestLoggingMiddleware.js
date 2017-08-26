@@ -1,4 +1,7 @@
-module.exports = function (Logger, expressWinston, BaseMiddleware, config, _) {
+const _assignIn = require('lodash.assignin');
+
+module.exports = function (Logger, expressWinston, BaseMiddleware, config) {
+
   class WinstonRequestLoggingMiddleware extends BaseMiddleware {
 
     configure(app) {
@@ -13,7 +16,7 @@ module.exports = function (Logger, expressWinston, BaseMiddleware, config, _) {
         colorStatus: true
       };
 
-      this.app.use(expressWinston.logger(_.extend(this.options, this.config)));
+      this.app.use(expressWinston.logger(_assignIn(this.options, this.config)));
     }
 
   }

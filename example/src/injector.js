@@ -7,7 +7,7 @@ const registerConfig = require('spur-common/registerConfig');
  Outside of this project, you use the distributed module
  const spurWeb = require('spur-web');
 */
-const spurWeb = require('../../lib/injector');
+const spurWeb = require('../../src/injector');
 
 module.exports = function () {
   const ioc = spur.create('example');

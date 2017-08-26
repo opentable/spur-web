@@ -1,4 +1,4 @@
-import spur from 'spur-ioc';
+const spur = require('spur-ioc');
 
 // NEED to use require vs import to test module export for backward compatability
 const mainModule = require('../../');
@@ -12,7 +12,7 @@ describe('Integration', () => {
 
     describe('base dependencies', () => {
       it('base module dependencies are injectable', function () {
-        this.ioc.inject((express, expressDevice, methodOverride, cookieParser, bodyParser, expressWinston, ejs) => {
+        this.ioc.inject(function (express, expressDevice, methodOverride, cookieParser, bodyParser, expressWinston, ejs) {
           expect(express).to.exist;
           expect(expressDevice).to.exist;
           expect(methodOverride).to.exist;

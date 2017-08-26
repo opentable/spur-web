@@ -1,5 +1,7 @@
-/* eslint-disable no-param-reassign */
-module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, _) {
+const _some = require('lodash.some');
+const _assignIn = require('lodash.assignin');
+
+module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) {
   class ErrorMiddleware extends BaseMiddleware {
 
     configure(app) {
@@ -38,7 +40,7 @@ module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, 
       const statusCode = err.statusCode || 0;
       const checkStatus = (status) => status === statusCode;
 
-      if (!_.some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
+      if (!_some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
         Logger.error(err, '\n', err.stack, '\n', (err.data || ''));
       }
     }
@@ -48,7 +50,7 @@ module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware, 
         err.data = {};
       }
 
-      err.data = _.extend(err.data, {
+      err.data = _assignIn(err.data, {
         url: req.url
       });
     }

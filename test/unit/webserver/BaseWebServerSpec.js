@@ -1,23 +1,25 @@
 describe('BaseTestWebServer', function () {
+  const base = this;
+
   beforeEach(() => {
-    injector().inject((TestWebServer, config, HTTPService, Logger) => {
-      this.TestWebServer = TestWebServer;
-      this.config = config;
-      this.HTTPService = HTTPService;
-      this.Logger = Logger;
+    injector().inject(function (TestWebServer, config, HTTPService, Logger) {
+      base.TestWebServer = TestWebServer;
+      base.config = config;
+      base.HTTPService = HTTPService;
+      base.Logger = Logger;
 
-      this.Logger.useRecorder();
+      base.Logger.useRecorder();
 
-      this.TestWebServer.start();
+      base.TestWebServer.start();
     });
   });
 
   afterEach(() => {
-    this.TestWebServer.stop();
+    base.TestWebServer.stop();
   });
 
   it('get index', (done) => {
-    this.HTTPService
+    base.HTTPService
       .get('http://localhost:9088/')
       .promise()
       .then((res) => {
