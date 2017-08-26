@@ -1,11 +1,13 @@
 describe('NoCacheMiddleware', function () {
+  const base = this;
+
   beforeEach(() => {
-    injector().inject((NoCacheMiddleware) => {
-      this.NoCacheMiddleware = NoCacheMiddleware;
+    injector().inject(function (NoCacheMiddleware) {
+      base.NoCacheMiddleware = NoCacheMiddleware;
     });
   });
 
   it('should exist', () => {
-    expect(this.NoCacheMiddleware).to.exist;
+    expect(base.NoCacheMiddleware).to.exist;
   });
 });

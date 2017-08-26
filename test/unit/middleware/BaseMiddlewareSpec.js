@@ -1,21 +1,23 @@
 describe('BaseMiddleware', function () {
-  beforeEach(() => {
-    injector().inject((TestBaseMiddleware, Logger) => {
-      this.TestBaseMiddleware = TestBaseMiddleware;
-      this.Logger = Logger;
+  const base = this;
 
-      this.Logger.useRecorder();
+  beforeEach(() => {
+    injector().inject(function (TestBaseMiddleware, Logger) {
+      base.TestBaseMiddleware = TestBaseMiddleware;
+      base.Logger = Logger;
+
+      base.Logger.useRecorder();
     });
   });
 
   it('should log subclass registration', () => {
-    this.TestBaseMiddleware.configure('app');
+    base.TestBaseMiddleware.configure('app');
 
-    expect(this.Logger.recorded.log).to.deep.equal([
+    expect(base.Logger.recorded.log).to.deep.equal([
       ['Subclass called']
     ]);
 
-    expect(this.Logger.recorded.info).to.deep.equal([
+    expect(base.Logger.recorded.info).to.deep.equal([
       ['Registering Middleware: TestBaseMiddleware']
     ]);
   });

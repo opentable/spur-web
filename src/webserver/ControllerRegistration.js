@@ -1,4 +1,8 @@
-module.exports = function ($injector, _, Logger, BaseController) {
+const _values = require('lodash.values');
+const _filter = require('lodash.filter');
+const _invokeMap = require('lodash.invokemap');
+
+module.exports = function ($injector, Logger, BaseController) {
   const controllers = $injector.getRegex(/Controller$/);
 
   class ControllerRegistration {
@@ -8,11 +12,12 @@ module.exports = function ($injector, _, Logger, BaseController) {
         return (c instanceof BaseController);
       };
 
-      const registeredCount = _.chain(controllers)
-        .values()
-        .filter(instanceOfBaseController)
-        .invokeMap('configure', app)
-        .value().length;
+      const filteredValues = _filter(_values(controllers), instanceOfBaseController);
+
+      // Call the configuration against every controller
+      _invokeMap(filteredValues, 'configure', app);
+
+      const registeredCount = filteredValues.length;
 
       Logger.info(`Registered ${registeredCount} Controller(s)`, { count: registeredCount });
 

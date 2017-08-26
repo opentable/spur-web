@@ -24,20 +24,18 @@ The Spur Framework is a collection of commonly used Node.JS libraries used to cr
 ## Installing
 
 `Dependencies:`
-```bash
+```shell
 $ npm install --save spur-ioc spur-common spur-config
 ```
 
 `Module:`
-```bash
+```shell
 $ npm install --save spur-web
 ```
 
-**Note:** The example code below expects that you are using Node 6. The library works for versions older than Node 4, but only tested with the Node versions still supported under the [Node LTS schedule](https://github.com/nodejs/LTS).
+**Note:** The example code below expects that you are using Node 6. We follow the active [Node LTS schedule](https://github.com/nodejs/LTS).
 
 ## Usage
-
-This example shows one of the most basic examples of setting up a spur web server. For a fully detailed example, [please view the example here](https://github.com/opentable/spur-examples/tree/master/spur-web).
 
 #### `src/config/*`
 
@@ -231,7 +229,7 @@ The majority of the settings are controlled using an [EditorConfig](.editorconfi
 
 To run the test suite, first install the dependancies, then run `npm test`
 
-```bash
+```shell
 $ npm install
 $ npm test
 ```

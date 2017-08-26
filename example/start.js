@@ -1,4 +1,3 @@
-/* eslint-disable prefer-arrow-callback */
 const injector = require('./src/injector');
 
 injector().inject(function (UncaughtHandler, WebServer, Logger, config, configLoader, nodeProcess) {

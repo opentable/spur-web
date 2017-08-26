@@ -2,18 +2,14 @@
   "name": "spur-web",
   "version": "1.0.1",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
-  "main": "lib/injector",
-  "jsnext:main": "./src/injector",
+  "main": "./src/injector",
   "scripts": {
-    "build": "babel src -d lib --source-maps",
-    "dev": "babel --watch src -d lib",
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test-unit": "babel-node --debug node_modules/mocha/bin/_mocha ./test/unit/",
-    "test-integration": "babel-node --debug node_modules/mocha/bin/_mocha ./test/integration/",
+    "test-unit": "mocha ./test/unit/",
+    "test-integration": "mocha ./test/integration/",
     "test": "npm run test-unit && npm run test-integration",
-    "start": "node example/start.js",
-    "build-and-test": "npm run build && npm test"
+    "start": "node example/start.js"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
@@ -60,24 +56,25 @@
     "express": "^4.11.1",
     "express-device": "^0.4.2",
     "express-winston": "^2.0.0",
+    "lodash.assignin": "4.2.0",
+    "lodash.filter": "4.6.0",
+    "lodash.first": "3.0.0",
+    "lodash.invokemap": "4.6.0",
+    "lodash.last": "3.0.0",
+    "lodash.some": "4.6.0",
+    "lodash.values": "4.3.0",
     "method-override": "^2.3.1",
-    "spur-ioc": "^0.2.4",
+    "spur-ioc": ">=1.0.0-rc.1",
     "winston": "^2.3.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.5.1",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-es2015": "^6.5.0",
-    "babel-preset-es2015-loose": "^7.0.0",
-    "chai": "^3.5.0",
+    "chai": "^4.1.1",
+    "eslint": "^4.5.0",
+    "eslint-plugin-node": "^5.1.1",
     "colors": "^1.1.2",
-    "eslint": "^2.4.0",
-    "eslint-config-opentable": "^4.0.0",
-    "eslint-plugin-import": "^1.8.1",
-    "mocha": "^2.1.0",
-    "nock": "^8.0.0",
-    "sinon": "^1.17.6",
-    "spur-common": "^1.0.0",
-    "spur-config": "^1.0.0"
+    "spur-common": ">=2.0.0-rc.1",
+    "spur-config": ">=2.0.0-rc.1",
+    "mocha": "^3.5.0",
+    "sinon": "^3.2.1"
   }
 }

@@ -1,11 +1,13 @@
 describe('BaseController', function () {
+  const base = this;
+
   beforeEach(() => {
-    injector().inject((BaseController) => {
-      this.BaseController = BaseController;
+    injector().inject(function (BaseController) {
+      base.BaseController = BaseController;
     });
   });
 
   it('should map a rootWebPath from config', () => {
-    expect(new this.BaseController().rootWebPath).to.equal('/user/agustin/test/');
+    expect(new base.BaseController().rootWebPath).to.equal('/user/agustin/test/');
   });
 });

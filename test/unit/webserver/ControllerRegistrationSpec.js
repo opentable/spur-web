@@ -1,11 +1,13 @@
 describe('ControllerRegistration', function () {
+  const base = this;
+
   beforeEach(() => {
-    injector().inject((ControllerRegistration) => {
-      this.ControllerRegistration = ControllerRegistration;
+    injector().inject(function (ControllerRegistration) {
+      base.ControllerRegistration = ControllerRegistration;
     });
   });
 
   it('should exist', () => {
-    expect(this.ControllerRegistration).to.exist;
+    expect(base.ControllerRegistration).to.exist;
   });
 });
