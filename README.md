@@ -2,8 +2,9 @@
 
 Common node modules and express middleware that are designed to be the boilerplate of a node web app.
 
-[![NPM version](https://badge.fury.io/js/spur-web.png)](http://badge.fury.io/js/spur-web)
-[![Build Status](https://travis-ci.org/opentable/spur-web.png?branch=master)](https://travis-ci.org/opentable/spur-web)
+  [![NPM Version][npm-version-image]][npm-url]
+  [![NPM Install Size][npm-install-size-image]][npm-install-size-url]
+  [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
 # About the Spur Framework
 
@@ -237,3 +238,10 @@ $ npm test
 # License
 
 [MIT](LICENSE)
+
+[npm-downloads-image]: https://badgen.net/npm/dm/spur-web
+[npm-downloads-url]: https://npmcharts.com/compare/spur-web?minimal=true
+[npm-install-size-image]: https://badgen.net/packagephobia/install/spur-web
+[npm-install-size-url]: https://packagephobia.com/result?p=spur-web
+[npm-url]: https://npmjs.org/package/spur-web
+[npm-version-image]: https://badgen.net/npm/v/spur-web
