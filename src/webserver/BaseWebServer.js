@@ -1,6 +1,14 @@
-module.exports = function (express, DefaultMiddleware, PromiseMiddleware,
-  Logger, Promise, ErrorMiddleware, config, ControllerRegistration,
-  WinstonRequestLoggingMiddleware) {
+module.exports = function (
+  express,
+  DefaultMiddleware,
+  PromiseMiddleware,
+  Logger,
+  Promise,
+  ErrorMiddleware,
+  config,
+  ControllerRegistration,
+  WinstonRequestLoggingMiddleware
+) {
   class BaseWebServer {
 
     constructor() {

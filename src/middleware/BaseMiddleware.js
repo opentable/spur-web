@@ -1,4 +1,6 @@
-module.exports = function (Logger) {
+module.exports = function (
+  Logger
+) {
   class BaseMiddleware {
     configure(app) {
       this.app = app;

@@ -1,6 +1,11 @@
 const _assignIn = require('lodash.assignin');
 
-module.exports = function (Logger, expressWinston, BaseMiddleware, config) {
+module.exports = function (
+  Logger,
+  expressWinston,
+  BaseMiddleware,
+  config
+) {
 
   class WinstonRequestLoggingMiddleware extends BaseMiddleware {
 

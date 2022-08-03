@@ -2,7 +2,11 @@ const _values = require('lodash.values');
 const _filter = require('lodash.filter');
 const _invokeMap = require('lodash.invokemap');
 
-module.exports = function ($injector, Logger, BaseController) {
+module.exports = function (
+  $injector,
+  Logger,
+  BaseController
+) {
   const controllers = $injector.getRegex(/Controller$/);
 
   class ControllerRegistration {

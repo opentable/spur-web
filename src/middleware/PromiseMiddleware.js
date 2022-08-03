@@ -1,6 +1,9 @@
 const _first = require('lodash.first');
 
-module.exports = function (Promise, BaseMiddleware) {
+module.exports = function (
+  Promise,
+  BaseMiddleware
+) {
 
   class PromiseMiddleware extends BaseMiddleware {
 
