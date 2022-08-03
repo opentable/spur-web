@@ -29,14 +29,6 @@ describe('PromiseMiddleware', function () {
       expect(response.body).to.equal('jsonAsync success');
     });
   });
-
-  it('renderAsync - success', () => {
-    return base.getResponse('renderasync').promise().then((response) => {
-      expect(response.type).to.equal('text/html');
-      expect(response.text).to.contain('renderView from ejs: renderAsync success');
-    });
-  });
-
   it('sendStatusAsync - success', () => {
     return base.getResponse('sendstatusasync').promise().then((response) => {
       expect(response.type).to.equal('text/plain');

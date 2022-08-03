@@ -6,7 +6,6 @@ const methodOverride = require('method-override');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressWinston = require('express-winston');
-const ejs = require('ejs');
 
 module.exports = function injector() {
   const ioc = spur.create('spur-web');
@@ -17,8 +16,7 @@ module.exports = function injector() {
     methodOverride,
     cookieParser,
     bodyParser,
-    expressWinston,
-    ejs
+    expressWinston
   });
 
   ioc.registerFolders(__dirname, [
