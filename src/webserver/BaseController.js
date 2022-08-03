@@ -1,4 +1,7 @@
-module.exports = function (config, Logger) {
+module.exports = function (
+  config,
+  Logger
+) {
   class BaseController {
 
     constructor() {

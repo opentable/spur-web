@@ -1,14 +1,18 @@
 const _some = require('lodash.some');
 const _assignIn = require('lodash.assignin');
 
-module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) {
+module.exports = function (
+  SpurErrors,
+  Logger,
+  HtmlErrorRender,
+  BaseMiddleware
+) {
   class ErrorMiddleware extends BaseMiddleware {
 
     configure(app) {
       super.configure(app);
 
       this.EXCLUDE_STATUSCODE_FROM_LOGS = [404];
-
       this.app.use(this.throwNotFoundError);
       this.app.use(this.middleware.bind(this));
     }

@@ -1,4 +1,10 @@
-module.exports = function (bodyParser, cookieParser, methodOverride, expressDevice, BaseMiddleware) {
+module.exports = function (
+  bodyParser,
+  cookieParser,
+  methodOverride,
+  expressDevice,
+  BaseMiddleware
+) {
   class DefaultMiddleware extends BaseMiddleware {
 
     configure(app) {
