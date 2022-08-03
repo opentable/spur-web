@@ -80,33 +80,12 @@ module.exports = function (BaseWebServer, path) {
     // Add additional changes to the middleware by overriding the method
     registerDefaultMiddleware() {
       super.registerDefaultMiddleware();
-      this.registerEjsTemplates();
-    }
-
-    registerEjsTemplates() {
-      this.logSectionHeader('EJS Template Registration');
-
-      this.app.set('view engine', 'ejs');
-      this.app.set('views', path.join(__dirname, '../views'));
     }
   }
 
   // Assure there is just one instance
   return new WebServer();
 };
-```
-
-#### `src/views/hello.ejs`
-
-```html
-<html>
-  <head>
-     <meta charset="utf-8">
-  </head>
-<body>
-  <h1><%= user %></h1>
-</body>
-</html>
 ```
 
 #### `src/controllers/HelloController.js`
@@ -129,11 +108,7 @@ module.exports = function (BaseController) {
     }
 
     getHello(req, res) {
-      const model = {
-        user: req.query.user || 'John Doe'
-      };
-
-      res.render('hello', model);
+      res.send('hello');
     }
 
   }
@@ -184,7 +159,6 @@ List of external dependencies used and exposed by spur-web. They can be found at
 | **cookieParser**   | [cookie-parser](https://www.npmjs.org/package/cookie-parser)     |
 | **bodyParser**     | [body-parser](https://www.npmjs.org/package/body-parser)         |
 | **expressWinston** | [express-winston](https://www.npmjs.org/package/express-winston) |
-| **ejs**            | [ejs](https://www.npmjs.org/package/ejs)                         |
 
 ### Local dependecies
 
