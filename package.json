@@ -63,7 +63,7 @@
     "lodash.some": "4.6.0",
     "lodash.values": "4.3.0",
     "method-override": "^3.0.0",
-    "spur-ioc": "^1.1.3",
+    "spur-ioc": "^1.2.1",
     "winston": "^3.8.1"
   },
   "devDependencies": {
@@ -71,8 +71,8 @@
     "eslint": "^8.21.0",
     "eslint-plugin-node": "^11.1.0",
     "colors": "^1.4.0",
-    "spur-common": "^2.1.1",
-    "spur-config": "^2.0.1",
+    "spur-common": "^2.1.3",
+    "spur-config": "^2.0.3",
     "mocha": "^10.0.0",
     "sinon": "^14.0.0"
   }
