@@ -1,23 +1,21 @@
 describe('DefaultMiddleware', function () {
-  const base = this;
 
   beforeEach(() => {
-    injector().inject(function (DefaultMiddleware, Logger, express) {
-      base.DefaultMiddleware = DefaultMiddleware;
-      base.Logger = Logger;
-      base.express = express;
+    return injector().inject((DefaultMiddleware, Logger, express) => {
+      this.DefaultMiddleware = DefaultMiddleware;
+      this.express = express;
 
-      base.Logger.useRecorder();
+      Logger.useRecorder();
     });
   });
 
   it('should define configure', () => {
-    expect(base.DefaultMiddleware.configure).to.exist;
+    expect(this.DefaultMiddleware.configure).to.exist;
   });
 
   it('should set app in the instance', () => {
-    const app = base.express();
-    base.DefaultMiddleware.configure(app);
-    expect(base.DefaultMiddleware.app).to.equal(app);
+    const app = this.express();
+    this.DefaultMiddleware.configure(app);
+    expect(this.DefaultMiddleware.app).to.equal(app);
   });
 });

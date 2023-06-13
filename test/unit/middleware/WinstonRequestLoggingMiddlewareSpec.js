@@ -1,108 +1,105 @@
-const _last = require('lodash.last');
-
 describe('WinstonRequestLoggingMiddleware', function () {
-  const base = this;
 
   beforeEach(() => {
-    base.MockPort = 9088;
+    this.MockPort = 9088;
 
-    injector().inject(function (WinstonRequestLoggingMiddleware, expressWinston, express,
-      HTTPService, Logger, config, colors, TestWebServer) {
-      base.WinstonRequestLoggingMiddleware = WinstonRequestLoggingMiddleware;
-      base.expressWinston = expressWinston;
-      base.express = express;
-      base.HTTPService = HTTPService;
-      base.Logger = Logger;
-      base.config = config;
-      base.colors = colors;
-      base.TestWebServer = TestWebServer;
+    return injector().inject((WinstonRequestLoggingMiddleware, expressWinston, express,
+      HTTPService, Logger, config, colors, TestWebServer) => {
+      this.WinstonRequestLoggingMiddleware = WinstonRequestLoggingMiddleware;
+      this.expressWinston = expressWinston;
+      this.express = express;
+      this.HTTPService = HTTPService;
+      this.Logger = Logger;
+      this.config = config;
+      this.colors = colors;
+      this.TestWebServer = TestWebServer;
 
-      sinon.spy(base.expressWinston, 'logger');
-      base.app = base.express();
-      base.Logger.useNoop();
+      sinon.spy(this.expressWinston, 'logger');
+      this.app = this.express();
+      this.Logger.useNoop();
     });
   });
 
   afterEach(() => {
-    return base.expressWinston.logger.restore();
+    return this.expressWinston.logger.restore();
   });
 
   describe('configure() with defaults', () => {
     beforeEach(() => {
-      base.WinstonRequestLoggingMiddleware.configure(base.app);
-      base.instanceConfig = base.WinstonRequestLoggingMiddleware.config;
-      base.options = base.WinstonRequestLoggingMiddleware.options;
+      this.WinstonRequestLoggingMiddleware.configure(this.app);
+      this.instanceConfig = this.WinstonRequestLoggingMiddleware.config;
+      this.options = this.WinstonRequestLoggingMiddleware.options;
     });
 
     it('should use empty config', () => {
-      expect(base.instanceConfig).to.deep.equal({});
+      expect(this.instanceConfig).to.deep.equal({});
     });
 
     it('should use the logger as the winston instance', () => {
-      expect(base.options.winstonInstance).to.equal(base.Logger);
+      expect(this.options.winstonInstance).to.equal(this.Logger);
     });
 
     it('should use default options', () => {
-      expect(base.options.meta).to.equal(true);
-      expect(base.options.expressFormat).to.equal(true);
-      expect(base.options.colorStatus).to.equal(true);
+      expect(this.options.meta).to.equal(true);
+      expect(this.options.expressFormat).to.equal(true);
+      expect(this.options.colorStatus).to.equal(true);
     });
 
     it('should call expressWinston.logger with options', () => {
-      expect(base.expressWinston.logger.getCall(0).args[0]).to.deep.equal(base.options);
+      expect(this.expressWinston.logger.getCall(0).args[0]).to.deep.equal(this.options);
     });
   });
 
   describe('configure() with custom config', () => {
     beforeEach(() => {
-      base.config.WinstonWebLogging = {
+      this.config.WinstonWebLogging = {
         meta: false,
         expressFormat: false,
         colorStatus: false,
         fakeOption: '123'
       };
 
-      base.WinstonRequestLoggingMiddleware.configure(base.app);
-      base.instanceConfig = base.WinstonRequestLoggingMiddleware.config;
-      base.options = base.WinstonRequestLoggingMiddleware.options;
+      this.WinstonRequestLoggingMiddleware.configure(this.app);
+      this.instanceConfig = this.WinstonRequestLoggingMiddleware.config;
+      this.options = this.WinstonRequestLoggingMiddleware.options;
     });
 
     it('should use the logger as the winston instance', () => {
-      expect(base.options.winstonInstance).to.equal(base.Logger);
+      expect(this.options.winstonInstance).to.equal(this.Logger);
     });
 
     it('should use custom options', () => {
-      expect(base.options.meta).to.equal(false);
-      expect(base.options.expressFormat).to.equal(false);
-      expect(base.options.colorStatus).to.equal(false);
+      expect(this.options.meta).to.equal(false);
+      expect(this.options.expressFormat).to.equal(false);
+      expect(this.options.colorStatus).to.equal(false);
     });
 
     it('should add a non-default option', () => {
-      expect(base.options.fakeOption).to.equal('123');
+      expect(this.options.fakeOption).to.equal('123');
     });
 
     it('should call expressWinston.logger with options', () => {
-      expect(base.expressWinston.logger.getCall(0).args[0]).to.deep.equal(base.options);
+      expect(this.expressWinston.logger.getCall(0).args[0]).to.deep.equal(this.options);
     });
   });
 
   describe('with request', () => {
     beforeEach(() => {
-      base.startServer = () => {
-        base.Logger.useRecorder();
-        return base.TestWebServer.start();
+      this.startServer = () => {
+        this.Logger.useRecorder();
+        return this.TestWebServer.start();
       };
     });
 
     afterEach(() => {
-      return base.TestWebServer.stop();
+      return this.TestWebServer.stop();
     });
 
     it('should log a winston request with json meta', () => {
-      return base.startServer().then(() => {
-        return base.HTTPService.get('http://localhost:9088').promise().then((res) => {
-          const lastEntry = _last(base.Logger.recorded.log);
-          const message = base.colors.strip(lastEntry[1]);
+      return this.startServer().then(() => {
+        return this.HTTPService.get('http://localhost:9088').promise().then((res) => {
+          const lastEntry = this.Logger.recorded.log.pop();
+          const message = this.colors.strip(lastEntry[1]);
           const data = lastEntry[2];
 
           const expectedData = {
@@ -134,12 +131,13 @@ describe('WinstonRequestLoggingMiddleware', function () {
     });
 
     it('should log a winston request without meta', () => {
-      base.config.WinstonWebLogging = { expressFormat: true, meta: false };
+      this.config.WinstonWebLogging = { expressFormat: true, meta: false };
 
-      return base.startServer().then(() => {
-        return base.HTTPService.get('http://localhost:9088').promise().then((res) => {
-          const lastEntry = _last(base.Logger.recorded.log);
-          const message = base.colors.strip(lastEntry[1]);
+      return this.startServer().then(() => {
+        return this.HTTPService.get('http://localhost:9088').promise().then((res) => {
+          const lastEntry = this.Logger.recorded.log.pop();
+
+          const message = this.colors.strip(lastEntry[1]);
           const data = lastEntry[2];
           const expectedData = {};
 
@@ -151,12 +149,12 @@ describe('WinstonRequestLoggingMiddleware', function () {
     });
 
     it('should log a winston request with meta for error', () => {
-      base.config.WinstonWebLogging = { expressFormat: true, meta: false };
+      this.config.WinstonWebLogging = { expressFormat: true, meta: false };
 
-      return base.startServer().then(() => {
-        return base.HTTPService.get('http://localhost:9088/with-error').promise().catch((res) => {
-          const lastEntry = _last(base.Logger.recorded.log);
-          const message = base.colors.strip(lastEntry[1]);
+      return this.startServer().then(() => {
+        return this.HTTPService.get('http://localhost:9088/with-error').promise().catch((res) => {
+          const lastEntry = this.Logger.recorded.log.pop();
+          const message = this.colors.strip(lastEntry[1]);
           const data = lastEntry[2];
           const expectedData = {};
 

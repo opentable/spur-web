@@ -1,5 +1,3 @@
-const _first = require('lodash.first');
-
 module.exports = function (
   Promise,
   BaseMiddleware
@@ -30,7 +28,7 @@ module.exports = function (
 
       this.app.response.sendStatusAsync = function (...args) {
         return Promise.all(args)
-          .then((results) => this.sendStatus(_first(results).status))
+          .then((results) => this.sendStatus(results[0].status))
           .catch(this.req.next);
       };
 
