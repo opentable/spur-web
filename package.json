@@ -56,12 +56,8 @@
     "express-device": "^0.4.2",
     "express-winston": "^2.6.0",
     "lodash.assignin": "4.2.0",
-    "lodash.filter": "4.6.0",
-    "lodash.first": "3.0.0",
     "lodash.invokemap": "4.6.0",
-    "lodash.last": "3.0.0",
     "lodash.some": "4.6.0",
-    "lodash.values": "4.3.0",
     "method-override": "^3.0.0",
     "spur-ioc": "^2.0.0",
     "winston": "^3.9.0"
