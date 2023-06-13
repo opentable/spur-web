@@ -50,9 +50,9 @@
   },
   "homepage": "https://github.com/opentable/spur-web",
   "dependencies": {
-    "body-parser": "^1.20.0",
+    "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
-    "express": "^4.18.1",
+    "express": "^4.18.2",
     "express-device": "^0.4.2",
     "express-winston": "^2.6.0",
     "lodash.assignin": "4.2.0",
@@ -63,17 +63,17 @@
     "lodash.some": "4.6.0",
     "lodash.values": "4.3.0",
     "method-override": "^3.0.0",
-    "spur-ioc": "^1.2.1",
-    "winston": "^3.8.1"
+    "spur-ioc": "^2.0.0",
+    "winston": "^3.9.0"
   },
   "devDependencies": {
-    "chai": "^4.3.6",
-    "eslint": "^8.21.0",
+    "chai": "^4.3.7",
+    "eslint": "^8.42.0",
     "eslint-plugin-node": "^11.1.0",
     "colors": "^1.4.0",
-    "spur-common": "^3.0.0",
-    "spur-config": "^2.0.3",
-    "mocha": "^10.0.0",
-    "sinon": "^14.0.0"
+    "spur-common": "^3.0.2",
+    "spur-config": "^2.0.4",
+    "mocha": "^10.2.0",
+    "sinon": "^15.1.2"
   }
 }
