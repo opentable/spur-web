@@ -1,6 +1,6 @@
 {
   "name": "spur-web",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Common node modules and express middleware that are designed to be the boilerplate of a node web app.",
   "main": "./src/injector",
   "scripts": {
