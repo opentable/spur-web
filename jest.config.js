@@ -1,3 +1,4 @@
+/** @type {import('jest').Config} */
 module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['./src/**/*.js'],
@@ -11,10 +12,10 @@ module.exports = {
       statements: 89
     }
   },
+  maxWorkers: 1,
   moduleFileExtensions: ['js','json'],
   rootDir: '.',
   testEnvironment: 'node',
   testMatch: ['**/*.spec.js'],
-  testResultsProcessor: 'jest-teamcity-reporter',
   setupFiles: ['./test/testSetup.js'],
 };
