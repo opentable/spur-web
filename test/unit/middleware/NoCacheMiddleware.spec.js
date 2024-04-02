@@ -7,6 +7,6 @@ describe('NoCacheMiddleware', function () {
   });
 
   it('should exist', () => {
-    expect(this.NoCacheMiddleware).to.exist;
+    expect(this.NoCacheMiddleware).toBeDefined();
   });
 });

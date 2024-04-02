@@ -7,6 +7,6 @@ describe('ControllerRegistration', function () {
   });
 
   it('should exist', () => {
-    expect(this.ControllerRegistration).to.exist;
+    expect(this.ControllerRegistration).toBeDefined();
   });
 });

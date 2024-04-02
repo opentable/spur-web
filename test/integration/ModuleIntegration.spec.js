@@ -11,13 +11,13 @@ describe('Integration', function () {
     });
 
     it('base module dependencies are injectable', () => {
-      return this.ioc.inject((express, expressDevice, methodOverride, cookieParser, bodyParser, expressWinston) => {
-        expect(express).to.exist;
-        expect(expressDevice).to.exist;
-        expect(methodOverride).to.exist;
-        expect(cookieParser).to.exist;
-        expect(bodyParser).to.exist;
-        expect(expressWinston).to.exist;
+      this.ioc.inject((express, expressDevice, methodOverride, cookieParser, bodyParser, expressWinston) => {
+        expect(express).toBeDefined();
+        expect(expressDevice).toBeDefined();
+        expect(methodOverride).toBeDefined();
+        expect(cookieParser).toBeDefined();
+        expect(bodyParser).toBeDefined();
+        expect(expressWinston).toBeDefined();
       });
     });
   });

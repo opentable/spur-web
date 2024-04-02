@@ -6,6 +6,7 @@
 .sass-cache/
 .lock-wscript/
 node_modules/
+/coverage
 /dist
 /lib
 .DS_Store*
