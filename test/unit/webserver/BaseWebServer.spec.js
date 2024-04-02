@@ -20,7 +20,7 @@ describe('BaseTestWebServer', function () {
       .get('http://localhost:9088/')
       .promise()
       .then((res) => {
-        expect(res.text).to.equal('SomeIndex');
+        expect(res.text).toBe('SomeIndex');
         done();
       });
   });

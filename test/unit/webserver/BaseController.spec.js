@@ -7,6 +7,6 @@ describe('BaseController', function () {
   });
 
   it('should map a rootWebPath from config', () => {
-    expect(new this.BaseController().rootWebPath).to.equal('/user/agustin/test/');
+    expect(new this.BaseController().rootWebPath).toBe('/user/agustin/test/');
   });
 });

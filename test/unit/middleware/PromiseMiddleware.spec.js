@@ -21,15 +21,17 @@ describe('PromiseMiddleware', function () {
 
   it('jsonAsync - success', () => {
     return this.getResponse('jsonasync').promise().then((response) => {
-      expect(response.type).to.equal('application/json');
-      expect(response.body).to.equal('jsonAsync success');
+      expect(response).toEqual(expect.objectContaining(
+        { type: 'application/json', body: 'jsonAsync success' }
+      ));
     });
   });
+
   it('sendStatusAsync - success', () => {
     return this.getResponse('sendstatusasync').promise().then((response) => {
-      expect(response.type).to.equal('text/plain');
-      expect(response.status).to.equal(200);
-      expect(response.text).to.equal('OK');
+      expect(response).toEqual(expect.objectContaining(
+        { type: 'text/plain', status: 200, text: 'OK' }
+      ));
     });
   });
 });

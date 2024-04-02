@@ -12,11 +12,11 @@ describe('BaseMiddleware', function () {
   it('should log subclass registration', () => {
     this.TestBaseMiddleware.configure('app');
 
-    expect(this.Logger.recorded.log).to.deep.equal([
+    expect(this.Logger.recorded.log).toStrictEqual([
       ['Subclass called']
     ]);
 
-    expect(this.Logger.recorded.info).to.deep.equal([
+    expect(this.Logger.recorded.info).toStrictEqual([
       ['Registering Middleware: TestBaseMiddleware']
     ]);
   });
