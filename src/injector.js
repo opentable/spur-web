@@ -16,14 +16,10 @@ module.exports = function injector() {
     methodOverride,
     cookieParser,
     bodyParser,
-    expressWinston
+    expressWinston,
   });
 
-  ioc.registerFolders(__dirname, [
-    'handlers',
-    'middleware',
-    'webserver'
-  ]);
+  ioc.registerFolders(__dirname, ['handlers', 'middleware', 'webserver']);
 
   return ioc;
 };

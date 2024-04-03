@@ -15,15 +15,11 @@ module.exports = function () {
   // Register configuration
   registerConfig(ioc, path.join(__dirname, './config'));
 
-
   ioc.merge(spurCommon());
   ioc.merge(spurWeb());
 
   // register folders in your project to be auto-injected
-  ioc.registerFolders(__dirname, [
-    'controllers/',
-    'runtime/'
-  ]);
+  ioc.registerFolders(__dirname, ['controllers/', 'runtime/']);
 
   return ioc;
 };

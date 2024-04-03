@@ -1,5 +1,4 @@
 describe('DefaultMiddleware', function () {
-
   beforeEach(() => {
     return injector().inject((DefaultMiddleware, Logger, express) => {
       this.DefaultMiddleware = DefaultMiddleware;

@@ -1,9 +1,12 @@
 describe('ErrorMiddleware', function () {
-  let htmlErrorRenderRenderSpy, errorMiddlewareSendTextResponseSpy, errorMiddlewareSendHtmlResponseSpy, errorMiddlewareSendJsonResponseSpy, loggerErrorSpy;
+  let htmlErrorRenderRenderSpy,
+    errorMiddlewareSendTextResponseSpy,
+    errorMiddlewareSendHtmlResponseSpy,
+    errorMiddlewareSendJsonResponseSpy,
+    loggerErrorSpy;
 
   beforeEach(() => {
-    injector().inject((ErrorMiddleware, HTTPService,
-      TestWebServer, HtmlErrorRender, Logger, config) => {
+    injector().inject((ErrorMiddleware, HTTPService, TestWebServer, HtmlErrorRender, Logger, config) => {
       this.ErrorMiddleware = ErrorMiddleware;
       this.HTTPService = HTTPService;
       this.TestWebServer = TestWebServer;
@@ -33,9 +36,7 @@ describe('ErrorMiddleware', function () {
 
       this.sendRequest = (accept, url) => {
         return this.startServerOnPort(this.mockPort).then(() => {
-          return this.HTTPService.get(url)
-            .set({ Accept: accept })
-            .promise();
+          return this.HTTPService.get(url).set({ Accept: accept }).promise();
         });
       };
 
@@ -46,7 +47,7 @@ describe('ErrorMiddleware', function () {
           expect.any(String),
           expect.any(String),
           expect.any(String),
-          { url: expectUrl }
+          { url: expectUrl },
         );
       };
     });

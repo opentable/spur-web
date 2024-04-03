@@ -1,5 +1,4 @@
 describe('BaseMiddleware', function () {
-
   beforeEach(() => {
     return injector().inject((TestBaseMiddleware, Logger) => {
       this.TestBaseMiddleware = TestBaseMiddleware;
@@ -12,12 +11,8 @@ describe('BaseMiddleware', function () {
   it('should log subclass registration', () => {
     this.TestBaseMiddleware.configure('app');
 
-    expect(this.Logger.recorded.log).toStrictEqual([
-      ['Subclass called']
-    ]);
+    expect(this.Logger.recorded.log).toStrictEqual([['Subclass called']]);
 
-    expect(this.Logger.recorded.info).toStrictEqual([
-      ['Registering Middleware: TestBaseMiddleware']
-    ]);
+    expect(this.Logger.recorded.info).toStrictEqual([['Registering Middleware: TestBaseMiddleware']]);
   });
 });

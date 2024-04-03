@@ -2,9 +2,9 @@
 
 Common node modules and express middleware that are designed to be the boilerplate of a node web app.
 
-  [![NPM Version][npm-version-image]][npm-url]
-  [![NPM Install Size][npm-install-size-image]][npm-install-size-url]
-  [![NPM Downloads][npm-downloads-image]][npm-downloads-url]
+[![NPM Version][npm-version-image]][npm-url]
+[![NPM Install Size][npm-install-size-image]][npm-install-size-url]
+[![NPM Downloads][npm-downloads-image]][npm-downloads-url]
 
 # About the Spur Framework
 
@@ -15,7 +15,7 @@ The Spur Framework is a collection of commonly used Node.JS libraries used to cr
 # Topics
 
 - [Quick start](#quick-start)
-    - [Usage](#usage)
+  - [Usage](#usage)
 - [Available dependencies in injector](#available-dependencies-in-injector)
 - [Contributing](#contributing)
 - [License](#license)
@@ -25,11 +25,13 @@ The Spur Framework is a collection of commonly used Node.JS libraries used to cr
 ## Installing
 
 `Dependencies:`
+
 ```shell
 $ npm install --save spur-ioc spur-common spur-config
 ```
 
 `Module:`
+
 ```shell
 $ npm install --save spur-web
 ```
@@ -57,15 +59,11 @@ module.exports = function () {
   // Register configuration
   registerConfig(ioc, path.join(__dirname, './config'));
 
-
   ioc.merge(spurCommon());
   ioc.merge(spurWeb());
 
   // register folders in your project to be auto-injected
-  ioc.registerFolders(__dirname, [
-    'controllers/',
-    'runtime/'
-  ]);
+  ioc.registerFolders(__dirname, ['controllers/', 'runtime/']);
 
   return ioc;
 };
@@ -76,7 +74,6 @@ module.exports = function () {
 ```javascript
 module.exports = function (BaseWebServer, path) {
   class WebServer extends BaseWebServer {
-
     // Add additional changes to the middleware by overriding the method
     registerDefaultMiddleware() {
       super.registerDefaultMiddleware();
@@ -95,7 +92,6 @@ Files ending in `*Controller.js` are auto registered as controllers.
 ```javascript
 module.exports = function (BaseController) {
   class HelloController extends BaseController {
-
     configure(app) {
       super.configure(app);
 
@@ -110,7 +106,6 @@ module.exports = function (BaseController) {
     getHello(req, res) {
       res.send('hello');
     }
-
   }
 
   return new HelloController();
@@ -130,8 +125,7 @@ injector().inject(function (UncaughtHandler, WebServer, Logger, config, configLo
   Logger.info(`PORT: ${config.Port}`);
   Logger.info(`CONFIG: ${configLoader.configName}`);
 
-  WebServer.start()
-  .then(() => {
+  WebServer.start().then(() => {
     // Execute other logic after the server has started
   });
 });
@@ -152,7 +146,7 @@ To see the latest list of the default dependencies that are injected, check out 
 List of external dependencies used and exposed by spur-web. They can be found at npmjs.org using their original names.
 
 | Name               | Original Module Name                                             |
-| :----              | :----                                                            |
+| :----------------- | :--------------------------------------------------------------- |
 | **express**        | [express](https://www.npmjs.org/package/express)                 |
 | **expressDevice**  | [express-device](https://www.npmjs.org/package/express-device)   |
 | **methodOverride** | [method-override](https://www.npmjs.org/package/method-override) |
@@ -166,8 +160,8 @@ All of the files under the `src/` directory are made available when this module 
 
 #### Reusable
 
-| Name                       | Source                                              | Description                                                                                                 |
-| :----                      | :----                                               | :----                                                                                                       |
+| Name                       | Source                                          | Description                                                                                                 |
+| :------------------------- | :---------------------------------------------- | :---------------------------------------------------------------------------------------------------------- |
 | **BaseController**         | [code](src/webserver/BaseController.js)         | A base class in order to be able to identify all of the controllers derived from it.                        |
 | **BaseWebServer**          | [code](src/webserver/BaseWebServer.js)          | A base web server that sets all of the middleware mentioned here.                                           |
 | **ControllerRegistration** | [code](src/webserver/ControllerRegistration.js) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` |
@@ -175,15 +169,14 @@ All of the files under the `src/` directory are made available when this module 
 
 #### Used internally, but can be used/replaced
 
-| Name                                | Source                                                        | Description                                                                                           |
-| :----                               | :----                                                         | :----                                                                                                 |
-| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.js)                   | Sets basic error rendering for uncaught errors.                                                       |
-| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.js)               | Registers default express middleware: cookie parser, body parser, method override, and express device |
-| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.js)                 | Adds error handling for unhandled errors for requests.                                                |
-| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.js)               | Middleware for no cache headers |
+| Name                                | Source                                                    | Description                                                                                                                 |
+| :---------------------------------- | :-------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------- |
+| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.js)                   | Sets basic error rendering for uncaught errors.                                                                             |
+| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.js)               | Registers default express middleware: cookie parser, body parser, method override, and express device                       |
+| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.js)                 | Adds error handling for unhandled errors for requests.                                                                      |
+| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.js)               | Middleware for no cache headers                                                                                             |
 | **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.js)               | Extends the response object with functionality to be used through promises. It unwraps promises as they are being resolved. |
-| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.js) | Winston middleware for logging every request to the console log. |
-
+| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.js) | Winston middleware for logging every request to the console log.                                                            |
 
 # Contributing
 
@@ -191,10 +184,10 @@ All of the files under the `src/` directory are made available when this module 
 
 Please send in pull requests and they will be reviewed in a timely manner. Please review this [generic guide to submitting a good pull requests](https://github.com/blog/1943-how-to-write-the-perfect-pull-request). The only things we ask in addition are the following:
 
- * Please submit small pull requests
- * Provide a good description of the changes
- * Code changes must include tests
- * Be nice to each other in comments. :innocent:
+- Please submit small pull requests
+- Provide a good description of the changes
+- Code changes must include tests
+- Be nice to each other in comments. :innocent:
 
 ## Style guide
 

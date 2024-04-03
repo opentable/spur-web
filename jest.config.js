@@ -9,11 +9,11 @@ module.exports = {
       branches: 62,
       functions: 84,
       lines: 89,
-      statements: 89
-    }
+      statements: 89,
+    },
   },
   maxWorkers: 1,
-  moduleFileExtensions: ['js','json'],
+  moduleFileExtensions: ['js', 'json'],
   rootDir: '.',
   testEnvironment: 'node',
   testMatch: ['**/*.spec.js'],

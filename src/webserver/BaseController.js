@@ -1,9 +1,5 @@
-module.exports = function (
-  config,
-  Logger
-) {
+module.exports = function (config, Logger) {
   class BaseController {
-
     constructor() {
       this.rootWebPath = config.RootWebPath || '';
     }
@@ -11,7 +7,6 @@ module.exports = function (
     configure() {
       Logger.info(`Registering controller: ${this.constructor.name}`);
     }
-
   }
 
   return BaseController;

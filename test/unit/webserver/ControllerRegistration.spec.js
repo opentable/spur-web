@@ -1,5 +1,4 @@
 describe('ControllerRegistration', function () {
-
   beforeEach(() => {
     injector().inject((ControllerRegistration) => {
       this.ControllerRegistration = ControllerRegistration;

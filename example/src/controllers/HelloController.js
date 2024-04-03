@@ -1,6 +1,5 @@
 module.exports = function (BaseController) {
   class HelloController extends BaseController {
-
     configure(app) {
       super.configure(app);
 
@@ -14,12 +13,11 @@ module.exports = function (BaseController) {
 
     getHello(req, res) {
       const model = {
-        user: req.query.user || 'John Doe'
+        user: req.query.user || 'John Doe',
       };
 
       res.render('hello', model);
     }
-
   }
 
   return new HelloController();

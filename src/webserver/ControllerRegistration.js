@@ -1,17 +1,12 @@
 const _invokeMap = require('lodash.invokemap');
 
-module.exports = function (
-  $injector,
-  Logger,
-  BaseController
-) {
+module.exports = function ($injector, Logger, BaseController) {
   const controllers = $injector.getRegex(/Controller$/) || [];
 
   class ControllerRegistration {
-
     register(app) {
       const instanceOfBaseController = function (c) {
-        return (c instanceof BaseController);
+        return c instanceof BaseController;
       };
 
       const filteredValues = Object.values(controllers).filter(instanceOfBaseController);
@@ -21,7 +16,9 @@ module.exports = function (
 
       const registeredCount = filteredValues.length;
 
-      Logger.info(`Registered ${registeredCount} Controller(s)`, { count: registeredCount });
+      Logger.info(`Registered ${registeredCount} Controller(s)`, {
+        count: registeredCount,
+      });
 
       return registeredCount;
     }

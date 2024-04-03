@@ -1,6 +1,5 @@
 module.exports = function () {
   class HtmlErrorRender {
-
     static render(err, req, res) {
       return new HtmlErrorRender().render(err, req, res);
     }

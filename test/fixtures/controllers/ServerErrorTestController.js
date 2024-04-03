@@ -1,5 +1,4 @@
 module.exports = function (BaseController, SpurErrors) {
-
   class ServerErrorTestController extends BaseController {
     configure(app) {
       super.configure(app);

@@ -1,10 +1,5 @@
-module.exports = function (
-  Promise,
-  BaseMiddleware
-) {
-
+module.exports = function (Promise, BaseMiddleware) {
   class PromiseMiddleware extends BaseMiddleware {
-
     configure(app) {
       super.configure(app);
 
@@ -42,7 +37,7 @@ module.exports = function (
               },
               json: () => {
                 this.json(results);
-              }
+              },
             });
           })
           .catch(this.req.next);

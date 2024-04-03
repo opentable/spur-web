@@ -1,14 +1,8 @@
 const _some = require('lodash.some');
 const _assignIn = require('lodash.assignin');
 
-module.exports = function (
-  SpurErrors,
-  Logger,
-  HtmlErrorRender,
-  BaseMiddleware
-) {
+module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) {
   class ErrorMiddleware extends BaseMiddleware {
-
     configure(app) {
       super.configure(app);
 
@@ -34,7 +28,7 @@ module.exports = function (
       res.format({
         text: () => this.sendTextResponse(err, req, res),
         html: () => this.sendHtmlResponse(err, req, res),
-        json: () => this.sendJsonResponse(err, req, res)
+        json: () => this.sendJsonResponse(err, req, res),
       });
 
       next();
@@ -45,7 +39,7 @@ module.exports = function (
       const checkStatus = (status) => status === statusCode;
 
       if (!_some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
-        Logger.error(err, '\n', err.stack, '\n', (err.data || ''));
+        Logger.error(err, '\n', err.stack, '\n', err.data || '');
       }
     }
 
@@ -55,7 +49,7 @@ module.exports = function (
       }
 
       err.data = _assignIn(err.data, {
-        url: req.url
+        url: req.url,
       });
     }
 

@@ -1,5 +1,4 @@
 describe('NoCacheMiddleware', function () {
-
   beforeEach(() => {
     return injector().inject((NoCacheMiddleware) => {
       this.NoCacheMiddleware = NoCacheMiddleware;
