@@ -1,14 +1,8 @@
 const _some = require('lodash.some');
 const _assignIn = require('lodash.assignin');
 
-module.exports = function (
-  SpurErrors,
-  Logger,
-  HtmlErrorRender,
-  BaseMiddleware
-) {
+module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) {
   class ErrorMiddleware extends BaseMiddleware {
-
     configure(app) {
       super.configure(app);
 
@@ -34,7 +28,7 @@ module.exports = function (
       res.format({
         text: () => this.sendTextResponse(err, req, res),
         html: () => this.sendHtmlResponse(err, req, res),
-        json: () => this.sendJsonResponse(err, req, res)
+        json: () => this.sendJsonResponse(err, req, res),
       });
 
       next();

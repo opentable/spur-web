@@ -13,7 +13,7 @@ module.exports = {
     },
   },
   maxWorkers: 1,
-  moduleFileExtensions: ['js','json'],
+  moduleFileExtensions: ['js', 'json'],
   rootDir: '.',
   testEnvironment: 'node',
   testMatch: ['**/*.spec.js'],

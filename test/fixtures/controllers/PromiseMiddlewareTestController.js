@@ -1,7 +1,5 @@
 module.exports = function (BaseController, Promise) {
-
   class PromiseMiddlewareTestController extends BaseController {
-
     configure(app) {
       super.configure(app);
 

@@ -7,10 +7,9 @@ module.exports = function (
   ErrorMiddleware,
   config,
   ControllerRegistration,
-  WinstonRequestLoggingMiddleware
+  WinstonRequestLoggingMiddleware,
 ) {
   class BaseWebServer {
-
     constructor() {
       this.app = express();
     }
