@@ -7,6 +7,11 @@ describe('BaseTestWebServer', function () {
 
       Logger.useRecorder();
 
+      this.TestWebServer.setCluster({ worker: { id: 'some-cluster' } });
+
+      const port = this.TestWebServer.getPort();
+      expect(port).toBe(9088);
+
       this.TestWebServer.start();
     });
   });

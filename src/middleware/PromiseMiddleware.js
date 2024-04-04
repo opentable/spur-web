@@ -14,8 +14,8 @@ module.exports = function (
           .catch(this.req.next);
       };
 
-      this.app.response.renderAsync = function (view, properties = {}) {
-        return Promise.props(properties)
+      this.app.response.renderAsync = function (view, properties) {
+        return Promise.props(properties ?? {})
           .then((props) => this.render(view, props))
           .catch(this.req.next);
       };

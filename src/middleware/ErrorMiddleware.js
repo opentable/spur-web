@@ -41,22 +41,21 @@ module.exports = function (
     }
 
     logErrorStack(err) {
-      const statusCode = err.statusCode || 0;
+      const { statusCode } = err;
       const checkStatus = (status) => status === statusCode;
 
       if (!_some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
-        Logger.error(err, '\n', err.stack, '\n', (err.data || ''));
+        Logger.error(err, '\n', err.stack, '\n', err.data);
       }
     }
 
     appendRequestData(err, req) {
-      if (err.data == null) {
-        err.data = {};
-      }
-
-      err.data = _assignIn(err.data, {
-        url: req.url
-      });
+      err.data = _assignIn(
+        { ...err.data },
+        {
+          url: req.url,
+        },
+      );
     }
 
     sendTextResponse(err, req, res) {

@@ -4,6 +4,10 @@ module.exports = function (BaseController, Promise) {
 
     configure(app) {
       super.configure(app);
+
+      app.set('view engine', 'ejs');
+      app.set('views', `${__dirname}/views`);
+
       app.get('/promise-middleware-test--jsonasync', this.getJsonAsync);
       app.get('/promise-middleware-test--renderasync', this.getRenderAsync);
       app.get('/promise-middleware-test--sendAsync', this.getSendAsync);
@@ -16,7 +20,15 @@ module.exports = function (BaseController, Promise) {
     }
 
     getRenderAsync(req, res) {
-      res.renderAsync('renderView', Promise.resolve({ microapp: 'renderAsync success' }));
+      const { headers } = req;
+      const view = headers['x-view'];
+      const viewPropsHeader = headers['x-view-props'];
+      const viewProps = viewPropsHeader !== 'undefined' ? JSON.parse(viewPropsHeader) : undefined;
+      if (viewProps) {
+        res.renderAsync(view, Promise.resolve(viewProps));
+      } else {
+        res.renderAsync(view);
+      }
     }
 
     getSendAsync(req, res) {
@@ -28,7 +40,7 @@ module.exports = function (BaseController, Promise) {
     }
 
     getFormatAsync(req, res) {
-      res.formatAsync(Promise.resolve('formatAsync success'));
+      res.formatAsync('innerHTML', Promise.resolve('formatAsync success'));
     }
   }
 
