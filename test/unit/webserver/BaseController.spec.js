@@ -37,4 +37,43 @@ describe('BaseController', function () {
 
     expect(loggerInfoSpy).toHaveBeenCalledWith('Registering controller: BaseController');
   });
+
+  it('should call controller method with request object containing express-device value', (done) => {
+    let exception, mockRouteHandler, httpService, testWebServer;
+
+    injector().inject((express, Logger, MockController, HTTPService, TestWebServer) => {
+      Logger.useNoop();
+      
+      httpService = HTTPService;
+      testWebServer = TestWebServer;
+      mockRouteHandler = jest.spyOn(MockController, 'handleIndexRoute');
+      
+      const app = express();
+      MockController.configure(app);
+
+      TestWebServer.start();
+    });
+
+    httpService.get('http://localhost:9088/')
+      .set('user-agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) Amar/8612 (KHTML, like Gecko) Mobile/19A344 FBDV/iPhone14,2 Sri')
+      .promise()
+      .then(() => {
+        expect(mockRouteHandler).toHaveBeenCalledWith(
+          expect.objectContaining({
+            device: expect.objectContaining({
+              type: 'phone'
+            })
+          }),
+          expect.any(Object),
+          expect.any(Function)
+        );
+      })
+      .catch((err) => {
+        exception = err;
+      })
+      .finally(() => {
+        testWebServer.stop();
+        done(exception);
+      });
+  });
 });
