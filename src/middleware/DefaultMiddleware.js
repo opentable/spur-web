@@ -14,7 +14,7 @@ module.exports = function (
       this.app.use(bodyParser.urlencoded({ extended: false }));
       this.app.use(bodyParser.json());
       this.app.use(methodOverride());
-      this.app.use(expressDevice.capture());
+      this.app.use(expressDevice.capture({ parseUserAgent: true }));
     }
 
   }

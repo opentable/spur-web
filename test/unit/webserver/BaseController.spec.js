@@ -43,11 +43,11 @@ describe('BaseController', function () {
 
     injector().inject((express, Logger, MockController, HTTPService, TestWebServer) => {
       Logger.useNoop();
-      
+
       httpService = HTTPService;
       testWebServer = TestWebServer;
       mockRouteHandler = jest.spyOn(MockController, 'handleIndexRoute');
-      
+
       const app = express();
       MockController.configure(app);
 
@@ -60,12 +60,10 @@ describe('BaseController', function () {
       .then(() => {
         expect(mockRouteHandler).toHaveBeenCalledWith(
           expect.objectContaining({
-            device: expect.objectContaining({
-              type: 'phone'
-            })
+            device: expect.objectContaining({ type: 'phone', name: 'iPhone' }),
           }),
           expect.any(Object),
-          expect.any(Function)
+          expect.any(Function),
         );
       })
       .catch((err) => {
