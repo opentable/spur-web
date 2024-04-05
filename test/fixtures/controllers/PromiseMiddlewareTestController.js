@@ -5,7 +5,7 @@ module.exports = function (BaseController, Promise) {
     configure(app) {
       super.configure(app);
 
-      app.engine('ott', (filePath, options, callback) => {
+      const mockOpenTableTemplateViewEngine = (filePath, options, callback) => {
         fs.readFile(filePath, (err, content) => {
           const { settings, _locals, cache, ...vars } = options;
           let rendered = content.toString();
@@ -14,7 +14,9 @@ module.exports = function (BaseController, Promise) {
           });
           return callback(null, rendered);
         });
-      });
+      };
+
+      app.engine('ott', mockOpenTableTemplateViewEngine);
       app.set('views', `${__dirname}/views`);
 
       app.get('/promise-middleware-test--jsonasync', this.getJsonAsync);
