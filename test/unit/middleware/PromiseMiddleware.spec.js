@@ -46,9 +46,9 @@ describe('PromiseMiddleware', function () {
   });
 
   it.each`
-    testCase                                | view          | viewProps                              | textExpectation
-    ${"'microapp' when props are provided"} | ${'microapp'} | ${{ microapp: 'renderAsync success' }} | ${'renderAsync success'}
-    ${"'home' when props are not provided"} | ${'home'}     | ${undefined}                           | ${'No render view-props provided'}
+    testCase                                | view              | viewProps                              | textExpectation
+    ${"'microapp' when props are provided"} | ${'microapp.ott'} | ${{ microapp: 'renderAsync success' }} | ${'renderAsync success'}
+    ${"'home' when props are not provided"} | ${'home.ott'}     | ${undefined}                           | ${'No render view-props provided'}
   `('renderAsync - success: will render view $testCase', ({ view, viewProps, textExpectation }) => {
     return this.getResponse('renderAsync', { view, viewProps })
       .promise()
@@ -63,7 +63,7 @@ describe('PromiseMiddleware', function () {
     acceptHttpHeader      | expectedData
     ${'text/html'}        | ${{ text: 'document.innerHTML = "formatAsync success";', type: 'text/javascript' }}
     ${'application/json'} | ${{ text: '"formatAsync success"' }}
-  `('formatAsync: %s - success', ({ acceptHttpHeader, expectedData }) => {
+  `('formatAsync: $acceptHttpHeader - success', ({ acceptHttpHeader, expectedData }) => {
     return this.getResponse('formatAsync', { acceptHttpHeader })
       .promise()
       .then((response) => {

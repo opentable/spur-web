@@ -1,9 +1,20 @@
+const fs = require('fs');
+
 module.exports = function (BaseController, Promise) {
   class PromiseMiddlewareTestController extends BaseController {
     configure(app) {
       super.configure(app);
 
-      app.set('view engine', 'ejs');
+      app.engine('ott', (filePath, options, callback) => {
+        fs.readFile(filePath, (err, content) => {
+          const { settings, _locals, cache, ...vars } = options;
+          let rendered = content.toString();
+          Object.entries(vars).forEach(([placeholder, value]) => {
+            rendered = rendered.replace(`{{${placeholder}}}`, value);
+          });
+          return callback(null, rendered);
+        });
+      });
       app.set('views', `${__dirname}/views`);
 
       app.get('/promise-middleware-test--jsonasync', this.getJsonAsync);

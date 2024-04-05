@@ -34,12 +34,13 @@ module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) 
       next();
     }
 
-    logErrorStack(err) {
-      const { statusCode } = err;
+    logErrorStack(error) {
+      const err = error ?? {};
+      const statusCode = err.statusCode || 0;
       const checkStatus = (status) => status === statusCode;
 
       if (!_some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
-        Logger.error(err, '\n', err.stack, '\n', err.data);
+        Logger.error(err, '\n', err?.stack ?? '', '\n', err?.data ?? '');
       }
     }
 
