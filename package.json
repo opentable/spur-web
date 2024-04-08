@@ -59,7 +59,7 @@
     "lodash.invokemap": "4.6.0",
     "lodash.some": "4.6.0",
     "method-override": "3.0.0",
-    "spur-ioc": "2.0.0",
+    "spur-ioc": "2.1.0",
     "winston": "3.9.0"
   },
   "devDependencies": {
