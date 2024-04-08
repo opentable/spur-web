@@ -4,23 +4,23 @@ describe('WinstonRequestLoggingMiddleware', function () {
   beforeEach(() => {
     this.MockPort = 9088;
 
-    return injector().inject((WinstonRequestLoggingMiddleware, expressWinston, express,
-      HTTPService, Logger, config, colors, TestWebServer) => {
-      this.WinstonRequestLoggingMiddleware = WinstonRequestLoggingMiddleware;
-      this.expressWinston = expressWinston;
-      this.express = express;
-      this.HTTPService = HTTPService;
-      this.Logger = Logger;
-      this.config = config;
-      this.colors = colors;
-      this.TestWebServer = TestWebServer;
+    return injector().inject(
+      (WinstonRequestLoggingMiddleware, expressWinston, express, HTTPService, Logger, config, TestWebServer) => {
+        this.WinstonRequestLoggingMiddleware = WinstonRequestLoggingMiddleware;
+        this.expressWinston = expressWinston;
+        this.express = express;
+        this.HTTPService = HTTPService;
+        this.Logger = Logger;
+        this.config = config;
+        this.TestWebServer = TestWebServer;
 
-      expressWinstonLoggerSpy = jest.spyOn(this.expressWinston, 'logger');
-      loggerLogSpy = jest.spyOn(this.Logger, 'log');
+        expressWinstonLoggerSpy = jest.spyOn(this.expressWinston, 'logger');
+        loggerLogSpy = jest.spyOn(this.Logger, 'log');
 
-      this.app = this.express();
-      this.Logger.useNoop();
-    });
+        this.app = this.express();
+        this.Logger.useNoop();
+      },
+    );
   });
 
   afterEach(() => {
@@ -43,9 +43,7 @@ describe('WinstonRequestLoggingMiddleware', function () {
     });
 
     it('should use default options', () => {
-      expect(this.options).toEqual(expect.objectContaining(
-        { meta: true, expressFormat: true, colorStatus: true }
-      ));
+      expect(this.options).toEqual(expect.objectContaining({ meta: true, expressFormat: true }));
     });
 
     it('should call expressWinston.logger with options', () => {
@@ -58,8 +56,7 @@ describe('WinstonRequestLoggingMiddleware', function () {
       this.config.WinstonWebLogging = {
         meta: false,
         expressFormat: false,
-        colorStatus: false,
-        fakeOption: '123'
+        fakeOption: '123',
       };
 
       this.WinstonRequestLoggingMiddleware.configure(this.app);
@@ -72,9 +69,7 @@ describe('WinstonRequestLoggingMiddleware', function () {
     });
 
     it('should use custom options', () => {
-      expect(this.options).toEqual(expect.objectContaining(
-        { meta: false, expressFormat: false, colorStatus: false }
-      ));
+      expect(this.options).toEqual(expect.objectContaining({ meta: false, expressFormat: false }));
     });
 
     it('should add a non-default option', () => {
@@ -104,24 +99,30 @@ describe('WinstonRequestLoggingMiddleware', function () {
           headers: {
             'accept-encoding': 'gzip, deflate',
             connection: 'close',
-            host: 'localhost:9088'
+            host: 'localhost:9088',
           },
           httpVersion: '1.1',
           method: 'GET',
           originalUrl: '/',
           query: {},
-          url: '/'
+          url: '/',
         },
         res: {
-          statusCode: 200
+          statusCode: 200,
         },
-        responseTime: expect.any(Number)
+        responseTime: expect.any(Number),
       };
 
       return this.startServer().then(() => {
-        return this.HTTPService.get('http://localhost:9088').promise().then((res) => {
-          expect(loggerLogSpy).toHaveBeenLastCalledWith('info', expect.stringMatching(/GET \/ 200 \d+ms/), expectedData);
-        });
+        return this.HTTPService.get('http://localhost:9088')
+          .promise()
+          .then(() => {
+            expect(loggerLogSpy).toHaveBeenLastCalledWith(
+              'info',
+              expect.stringMatching(/GET \/ 200 \d+ms/),
+              expectedData,
+            );
+          });
       });
     });
 
@@ -129,9 +130,11 @@ describe('WinstonRequestLoggingMiddleware', function () {
       this.config.WinstonWebLogging = { expressFormat: true, meta: false };
 
       return this.startServer().then(() => {
-        return this.HTTPService.get('http://localhost:9088').promise().then((res) => {
-          expect(loggerLogSpy).toHaveBeenLastCalledWith('info', expect.stringMatching('GET / 200'), {});
-        });
+        return this.HTTPService.get('http://localhost:9088')
+          .promise()
+          .then(() => {
+            expect(loggerLogSpy).toHaveBeenLastCalledWith('info', expect.stringMatching('GET / 200'), {});
+          });
       });
     });
 
@@ -139,9 +142,11 @@ describe('WinstonRequestLoggingMiddleware', function () {
       this.config.WinstonWebLogging = { expressFormat: true, meta: false };
 
       return this.startServer().then(() => {
-        return this.HTTPService.get('http://localhost:9088/with-error').promise().catch((res) => {
-          expect(loggerLogSpy).toHaveBeenLastCalledWith('info', expect.stringMatching('GET /with-error 500'), {});
-        });
+        return this.HTTPService.get('http://localhost:9088/with-error')
+          .promise()
+          .catch(() => {
+            expect(loggerLogSpy).toHaveBeenLastCalledWith('info', expect.stringMatching('GET /with-error 500'), {});
+          });
       });
     });
   });
