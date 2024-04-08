@@ -3,7 +3,6 @@ const spur = require('spur-ioc');
 const spurCommon = require('spur-common');
 const localInjector = require('../../src/injector');
 const registerConfig = require('spur-common/registerConfig');
-const colors = require('colors');
 
 module.exports = function () {
 
@@ -19,10 +18,6 @@ module.exports = function () {
     'middleware/',
     'runtime/'
   ]);
-
-  ioc.registerDependencies({
-    colors: colors
-  });
 
   return ioc;
 };

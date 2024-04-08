@@ -1,6 +1,6 @@
 const spur = require('spur-ioc');
 
-// NEED to use require vs import to test module export for backward compatability
+// NEED to use require vs import to test module export for backward compatibility
 const mainModule = require('../../');
 
 describe('Integration', function () {

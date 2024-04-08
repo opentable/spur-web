@@ -3,7 +3,6 @@
     "node": true,
     "es2021": true
   },
-  "plugins": ["node"],
   "parserOptions": {
     "ecmaVersion": "latest"
   },

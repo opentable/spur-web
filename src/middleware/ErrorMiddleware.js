@@ -1,6 +1,3 @@
-const _some = require('lodash.some');
-const _assignIn = require('lodash.assignin');
-
 module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) {
   class ErrorMiddleware extends BaseMiddleware {
     configure(app) {
@@ -39,13 +36,13 @@ module.exports = function (SpurErrors, Logger, HtmlErrorRender, BaseMiddleware) 
       const statusCode = err.statusCode || 0;
       const checkStatus = (status) => status === statusCode;
 
-      if (!_some(this.EXCLUDE_STATUSCODE_FROM_LOGS, checkStatus)) {
+      if (!(this.EXCLUDE_STATUSCODE_FROM_LOGS ?? []).some(checkStatus)) {
         Logger.error(err, '\n', err?.stack ?? '', '\n', err?.data ?? '');
       }
     }
 
     appendRequestData(err, req) {
-      err.data = _assignIn(
+      err.data = Object.assign(
         { ...err.data },
         {
           url: req.url,
