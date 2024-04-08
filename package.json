@@ -62,7 +62,6 @@
   "devDependencies": {
     "@types/jest": "29.5.12",
     "eslint": "8.42.0",
-    "eslint-plugin-node": "11.1.0",
     "jest": "29.7.0",
     "spur-common": "3.0.2",
     "spur-config": "2.0.4"
