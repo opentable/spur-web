@@ -1,9 +1,24 @@
+const fs = require('fs');
+
 module.exports = function (BaseController, Promise) {
-
   class PromiseMiddlewareTestController extends BaseController {
-
     configure(app) {
       super.configure(app);
+
+      const mockOpenTableTemplateViewEngine = (filePath, options, callback) => {
+        fs.readFile(filePath, (err, content) => {
+          const { settings, _locals, cache, ...vars } = options;
+          let rendered = content.toString();
+          Object.entries(vars).forEach(([placeholder, value]) => {
+            rendered = rendered.replace(`{{${placeholder}}}`, value);
+          });
+          return callback(null, rendered);
+        });
+      };
+
+      app.engine('ott', mockOpenTableTemplateViewEngine);
+      app.set('views', `${__dirname}/views`);
+
       app.get('/promise-middleware-test--jsonasync', this.getJsonAsync);
       app.get('/promise-middleware-test--renderasync', this.getRenderAsync);
       app.get('/promise-middleware-test--sendAsync', this.getSendAsync);
@@ -16,7 +31,15 @@ module.exports = function (BaseController, Promise) {
     }
 
     getRenderAsync(req, res) {
-      res.renderAsync('renderView', Promise.resolve({ microapp: 'renderAsync success' }));
+      const { headers } = req;
+      const view = headers['x-view'];
+      const viewPropsHeader = headers['x-view-props'];
+      const viewProps = viewPropsHeader !== 'undefined' ? JSON.parse(viewPropsHeader) : undefined;
+      if (viewProps) {
+        res.renderAsync(view, Promise.resolve(viewProps));
+      } else {
+        res.renderAsync(view);
+      }
     }
 
     getSendAsync(req, res) {
@@ -28,7 +51,7 @@ module.exports = function (BaseController, Promise) {
     }
 
     getFormatAsync(req, res) {
-      res.formatAsync(Promise.resolve('formatAsync success'));
+      res.formatAsync('innerHTML', Promise.resolve('formatAsync success'));
     }
   }
 

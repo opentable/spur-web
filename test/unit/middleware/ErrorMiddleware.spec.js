@@ -2,8 +2,7 @@ describe('ErrorMiddleware', function () {
   let htmlErrorRenderRenderSpy, errorMiddlewareSendTextResponseSpy, errorMiddlewareSendHtmlResponseSpy, errorMiddlewareSendJsonResponseSpy, loggerErrorSpy;
 
   beforeEach(() => {
-    injector().inject((ErrorMiddleware, HTTPService,
-      TestWebServer, HtmlErrorRender, Logger, config) => {
+    injector().inject((ErrorMiddleware, HTTPService, TestWebServer, HtmlErrorRender, Logger, config) => {
       this.ErrorMiddleware = ErrorMiddleware;
       this.HTTPService = HTTPService;
       this.TestWebServer = TestWebServer;
@@ -12,6 +11,8 @@ describe('ErrorMiddleware', function () {
       this.config = config;
 
       this.mockPort = 9080;
+
+      Logger.useNoop();
 
       htmlErrorRenderRenderSpy = jest.spyOn(this.HtmlErrorRender, 'render');
       errorMiddlewareSendTextResponseSpy = jest.spyOn(this.ErrorMiddleware, 'sendTextResponse');
@@ -46,7 +47,7 @@ describe('ErrorMiddleware', function () {
           expect.any(String),
           expect.any(String),
           expect.any(String),
-          { url: expectUrl }
+          { url: expectUrl },
         );
       };
     });
@@ -163,5 +164,12 @@ describe('ErrorMiddleware', function () {
         expect(loggerErrorSpy).not.toHaveBeenCalled();
       });
     });
+  });
+
+  it("should not throw an error when logErrorStack is called without error argument and log 'empty' error", () => {
+    this.ErrorMiddleware.logErrorStack();
+    
+    expect(loggerErrorSpy).toHaveBeenCalledTimes(1);
+    expect(loggerErrorSpy).toHaveBeenCalledWith({}, '\n', '', '\n', '');
   });
 });

@@ -6,14 +6,14 @@ module.exports = {
   coveragePathIgnorePatterns: ['/node_modules/'],
   coverageThreshold: {
     global: {
-      branches: 62,
-      functions: 84,
-      lines: 89,
-      statements: 89
-    }
+      branches: 95,
+      functions: 98,
+      lines: 98,
+      statements: 98,
+    },
   },
   maxWorkers: 1,
-  moduleFileExtensions: ['js','json'],
+  moduleFileExtensions: ['js', 'json'],
   rootDir: '.',
   testEnvironment: 'node',
   testMatch: ['**/*.spec.js'],

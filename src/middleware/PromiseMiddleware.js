@@ -1,10 +1,5 @@
-module.exports = function (
-  Promise,
-  BaseMiddleware
-) {
-
+module.exports = function (Promise, BaseMiddleware) {
   class PromiseMiddleware extends BaseMiddleware {
-
     configure(app) {
       super.configure(app);
 
@@ -14,8 +9,8 @@ module.exports = function (
           .catch(this.req.next);
       };
 
-      this.app.response.renderAsync = function (view, properties = {}) {
-        return Promise.props(properties)
+      this.app.response.renderAsync = function (view, properties) {
+        return Promise.props(properties ?? {})
           .then((props) => this.render(view, props))
           .catch(this.req.next);
       };
@@ -42,7 +37,7 @@ module.exports = function (
               },
               json: () => {
                 this.json(results);
-              }
+              },
             });
           })
           .catch(this.req.next);

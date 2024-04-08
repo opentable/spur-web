@@ -7,22 +7,15 @@ module.exports = function (
   ErrorMiddleware,
   config,
   ControllerRegistration,
-  WinstonRequestLoggingMiddleware
+  WinstonRequestLoggingMiddleware,
 ) {
   class BaseWebServer {
-
     constructor() {
       this.app = express();
     }
 
     getPort() {
-      let port = config.Port;
-
-      if (this.server) {
-        port = this.server.address().port || port;
-      }
-
-      return port;
+      return this.server?.address()?.port ?? config.Port;
     }
 
     registerDefaultMiddleware() {
@@ -88,7 +81,7 @@ module.exports = function (
     }
 
     getCloseAsync() {
-      if (this.server && this.server.closeAsync) {
+      if (this.server?.closeAsync) {
         return this.server.closeAsync();
       }
 
@@ -96,11 +89,12 @@ module.exports = function (
     }
 
     startedMessage() {
+      const port = this.getPort();
       if (this.cluster) {
-        return `Worker ${this.cluster.worker.id} started on port ${this.getPort()}`;
+        return `Worker ${this.cluster.worker.id} started on port ${port}`;
       }
 
-      return `Express app started on port ${this.getPort()}`;
+      return `Express app started on port ${port}`;
     }
 
     logSectionHeader(message) {
