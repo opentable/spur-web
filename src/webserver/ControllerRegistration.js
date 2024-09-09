@@ -1,4 +1,5 @@
 module.exports = function ($injector, Logger, BaseController) {
+  // istanbul ignore next -- fallback [] is just for safety
   const controllers = $injector.getRegex(/Controller$/) || [];
 
   class ControllerRegistration {

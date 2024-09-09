@@ -38,40 +38,37 @@ describe('BaseController', function () {
     expect(loggerInfoSpy).toHaveBeenCalledWith('Registering controller: BaseController');
   });
 
-  it('should call controller method with request object containing express-device value', (done) => {
-    let exception, mockRouteHandler, httpService, testWebServer;
+  it.each([['express', false], ['fastify', true]])('should call controller method with request object containing express-device value when using underlying %s server', async (_, withFastify) => {
+    // Arrange
+    let mockRouteHandler, httpService, testWebServer;
 
-    injector().inject((express, Logger, MockController, HTTPService, TestWebServer) => {
+    injector().inject((Logger, MockController, HTTPService, TestWebServer) => {
       Logger.useNoop();
 
       httpService = HTTPService;
       testWebServer = TestWebServer;
       mockRouteHandler = jest.spyOn(MockController, 'handleIndexRoute');
-
-      const app = express();
-      MockController.configure(app);
-
-      TestWebServer.start();
+      expect(true).toBeTruthy();
     });
 
-    httpService.get('http://localhost:9088/')
+    const webServer = await testWebServer.start({ withFastify });
+
+    // Act
+    await httpService.get('http://localhost:9088/')
       .set('user-agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) Amar/8612 (KHTML, like Gecko) Mobile/19A344 FBDV/iPhone14,2 Sri')
-      .promise()
-      .then(() => {
-        expect(mockRouteHandler).toHaveBeenCalledWith(
-          expect.objectContaining({
-            device: expect.objectContaining({ type: 'phone', name: 'iPhone' }),
-          }),
-          expect.any(Object),
-          expect.any(Function),
-        );
+      .promise();
+
+    await webServer.stop();
+
+    // Assert
+    expect(mockRouteHandler).toHaveBeenCalledTimes(1);
+
+    const [requestArg, responseArg] = mockRouteHandler.mock.calls[0];
+    expect(requestArg).toEqual(
+      expect.objectContaining({
+        device: expect.objectContaining({ type: 'phone', name: 'iPhone' }),
       })
-      .catch((err) => {
-        exception = err;
-      })
-      .finally(() => {
-        testWebServer.stop();
-        done(exception);
-      });
+    );
+    expect(responseArg).toEqual(expect.any(Object));
   });
 });

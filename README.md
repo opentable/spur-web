@@ -103,7 +103,7 @@ module.exports = function (BaseController) {
     }
 
     getRoot(req, res) {
-      res.status(200).send('This is the root page defined in HelloController.js.');
+      res.statusCode(200).send('This is the root page defined in HelloController.js.');
     }
 
     getHello(req, res) {
@@ -128,9 +128,13 @@ injector().inject(function (UncaughtHandler, WebServer, Logger, config, configLo
   Logger.info(`PORT: ${config.Port}`);
   Logger.info(`CONFIG: ${configLoader.configName}`);
 
-  WebServer.start()
-    .then(() => {
+  const withFastify = true;
+  // WebServer.start() -- backward-compatibility for continued use of express
+  WebServer.start({ withFastify: true })
+    .then((webServer) => {
       // Execute other logic after the server has started
+      // webServer.app returns the underlying fastify or express app
+      // webServer.server returns the underlying fastify or express server
     });
 });
 ```
@@ -149,6 +153,7 @@ To see the latest list of the default dependencies that are injected, check out 
 
 List of external dependencies used and exposed by spur-web. They can be found at npmjs.org using their original names.
 
+#### express-related
 | Name               | Original Module Name                                             |
 | :----              | :----                                                            |
 | **express**        | [express](https://www.npmjs.org/package/express)                 |
@@ -158,29 +163,40 @@ List of external dependencies used and exposed by spur-web. They can be found at
 | **bodyParser**     | [body-parser](https://www.npmjs.org/package/body-parser)         |
 | **expressWinston** | [express-winston](https://www.npmjs.org/package/express-winston) |
 
+> _NOTE: `fastify`, `@fastify/cookie`, `@fastify/view` and `device` libraries are not injected. The fastify implementation does not use any of the express-related libraries_
+
 ### Local dependencies
 
 All of the files under the `src/` directory are made available when this module is merged into another injector. The following list are the notable dependencies available.
 
 #### Reusable
 
-| Name                       | Source                                          | Description                                                                                                 |
-| :----                      | :----                                           | :----                                                                                                       |
-| **BaseController**         | [code](src/webserver/BaseController.js)         | A base class in order to be able to identify all of the controllers derived from it.                        |
-| **BaseWebServer**          | [code](src/webserver/BaseWebServer.js)          | A base web server that sets all of the middleware mentioned here.                                           |
-| **ControllerRegistration** | [code](src/webserver/ControllerRegistration.js) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` |
-| **BaseMiddleware**         | [code](src/middleware/BaseMiddleware.js)        | A base class in order to be able to identify all of the middleware derived from it.                         |
+| Name                              | Source                                                 | Description                                                                                                                                    |
+| :----                             | :----                                                  | :----                                                                                                                                          |
+| **BaseController**                | [code](src/webserver/BaseController.js)                | A base class in order to be able to identify all of the controllers derived from it.                                                           |
+| **BaseWebServer**                 | [code](src/webserver/BaseWebServer.js)                 | A base web server façade that implements either a `fastify-` or `express-based` (default) web server.                                          |
+| **ExpressWebServer**              | [code](src/webserver/ExpressWebServer.js)              | An `express-based` web server that sets all of the middleware mentioned here.                                                                  |
+| **FastifyWebServer**              | [code](src/webserver/FastifyWebServer.js)              | A `fastify-based` web server that sets all of the middleware mentioned here.                                                                   |
+| **ControllerRegistration**        | [code](src/webserver/ControllerRegistration.js)        | Registers all of the controllers based on the BaseController type and also files that end with `Controller` for an `express-based` web server. |
+| **ControllerRegistrationFastify** | [code](src/webserver/ControllerRegistrationFastify.js) | Registers all of the controllers based on the BaseController type and also files that end with `Controller` for a `fastify-based` web server.  |
+| **BaseMiddleware**                | [code](src/middleware/BaseMiddleware.js)               | A base class in order to be able to identify all of the middleware derived from it.                                                            |
 
 #### Used internally, but can be used/replaced
 
-| Name                                | Source                                                    | Description                                                                                                                 |
-| :----                               | :----                                                     | :----                                                                                                                       |
-| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.js)                   | Sets basic error rendering for uncaught errors.                                                                             |
-| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.js)               | Registers default express middleware: cookie parser, and body parser                                                        |
-| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.js)                 | Adds error handling for unhandled errors for requests.                                                                      |
-| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.js)               | Middleware for no cache headers                                                                                             |
-| **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.js)               | Extends the response object with functionality to be used through promises. It unwraps promises as they are being resolved. |
-| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.js) | Winston middleware for logging every request to the console log.                                                            |
+| Name                                | Source                                                    | Description                                                                                                                                                                                         |
+| :----                               | :----                                                     | :----                                                                                                                                                                                               |
+| **HtmlErrorRender**                 | [code](src/handlers/HtmlErrorRender.js)                   | Sets basic error rendering for uncaught errors.                                                                                                                                                     |
+| **DefaultMiddleware**               | [code](src/middleware/DefaultMiddleware.js)               | Registers default `express` middleware: cookie parser, body parser, method override, and device                                                                                                     |
+| **DefaultMiddlewareFastify**        | [code](src/middleware/DefaultMiddlewareFastify.js)        | Registers default `fastify` middleware: cookie and device                                                                                                                                           |
+| **ErrorMiddleware**                 | [code](src/middleware/ErrorMiddleware.js)                 | Adds error handling for unhandled errors for `express` requests.                                                                                                                                    |
+| **ErrorMiddlewareFastify**          | [code](src/middleware/ErrorMiddlewareFastify.js)          | Adds error handling for unhandled errors for `fastify` requests _(for consistency with ErrorMiddleware for express requests)_.                                                                      |
+| **NoCacheMiddleware**               | [code](src/middleware/NoCacheMiddleware.js)               | Middleware for no cache headers                                                                                                                                                                     |
+| **PromiseMiddleware**               | [code](src/middleware/PromiseMiddleware.js)               | Extends the `express` response object with functionality to be used through promises. It unwraps promises as they are being resolved.                                                               |
+| **PromiseMiddlewareFastify**        | [code](src/middleware/PromiseMiddlewareFastify.js)        | Extends the `fastify` reply object with functionality to be used through promises. It unwraps promises as they are being resolved _(for consistency with PromiseMiddleware for express responses)_. |
+| **WinstonRequestLoggingMiddleware** | [code](src/middleware/WinstonRequestLoggingMiddleware.js) | Winston middleware for logging every request to the console log.                                                                                                                                    |
+
+# Migrating from `express` to `fastify`
+The current version supports fastify, but still uses express by default in an effort to minimize code changes while upgrading to the latest version. If a previous version was in use and using fastify is desired, see the [Migration Guide](./v5-migration-guide.md).
 
 # Contributing
 

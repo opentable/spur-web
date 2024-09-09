@@ -25,7 +25,7 @@ describe('PromiseMiddleware', function () {
     return this.getResponse('jsonAsync')
       .promise()
       .then((response) => {
-        expect(response).toEqual(expect.objectContaining({ type: 'application/json', body: 'jsonAsync success' }));
+        expect(response).toEqual(expect.objectContaining({ type: 'application/json', body: { message: 'jsonAsync success' } }));
       });
   });
 

@@ -7,8 +7,8 @@ injector().inject(function (UncaughtHandler, WebServer, Logger, config, configLo
   Logger.info(`PORT: ${config.Port}`);
   Logger.info(`CONFIG: ${configLoader.configName}`);
 
-  WebServer.start()
-  .then(() => {
-    // Execute other logic after the server has started
-  });
+  WebServer.start({ withFastify: false })
+    .then(({ app, server }) => {
+      // Execute other logic after the server has started
+    });
 });

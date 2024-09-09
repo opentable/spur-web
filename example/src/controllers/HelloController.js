@@ -17,7 +17,8 @@ module.exports = function (BaseController) {
         user: req.query.user || 'John Doe'
       };
 
-      res.render('hello', model);
+      // res.render('hello', model); throws Error: No default engine was specified and no extension was provided.
+      res.send({ message: `hello ${model.user}` });
     }
 
   }
