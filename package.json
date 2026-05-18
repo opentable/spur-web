@@ -56,7 +56,7 @@
     "express-device": "0.4.2",
     "express-winston": "2.6.0",
     "method-override": "3.0.0",
-    "spur-ioc": "2.0.0",
+    "spur-ioc": "2.1.0",
     "winston": "3.9.0"
   },
   "devDependencies": {
